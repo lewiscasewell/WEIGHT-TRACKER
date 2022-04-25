@@ -36,10 +36,10 @@ export default function Profile() {
 
   return (
     <div>
-      <Head>
+      {/* <Head>
         <title>WEIGHT-TRACKER / profile</title>
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Head> */}
       <MainContent>
         <div className="p-4">
           <div className="flex items-center justify-between">

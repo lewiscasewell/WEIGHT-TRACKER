@@ -64,10 +64,7 @@ export default function Home() {
       </Head>
 
       <MainContent>
-        <Calendar
-          numberOfDaysBack={numberOfDaysBack}
-          setNumberOfDaysBack={numberOfDaysBack}
-        />
+        <Calendar />
         <AllWeights
           scrollTop={scrollTop}
           myRef={myRef}
@@ -75,7 +72,6 @@ export default function Home() {
           weights={weights}
           numberOfDaysBack={numberOfDaysBack}
           setNumberOfDaysBack={numberOfDaysBack}
-          
         />
       </MainContent>
     </div>

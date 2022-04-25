@@ -1,0 +1,11 @@
+{
+  "name": "WEIGHT-TRACKER",
+  "short_name": "WEIGHT-TRACKER",
+  "theme_color": "#ffffff",
+  "background_color": "#f87171",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "splash_pages": null
+}

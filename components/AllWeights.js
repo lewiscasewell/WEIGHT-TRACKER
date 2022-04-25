@@ -61,6 +61,7 @@ const AllWeights = ({ scrollTop, myRef, onScroll, weights }) => {
     avgWeight: null,
     id: null,
   }))
+
   let mergedWeightsDates = [...weightsDates, ...longPeriodOfWeights]
   let uniqueArray = mergedWeightsDates.filter((item) => {
     if (!set.has(item.date)) {

@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import { RecoilRoot } from 'recoil'
 import AuthProvider from '../context/auth'
+import Head from 'next/head'
 
 export default function App({
   Component,

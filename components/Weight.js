@@ -7,7 +7,7 @@ import { Menu } from '@headlessui/react'
 import { modalState } from '../atoms/modalAtom'
 import WeightOptionsMenu from './WeightOptionsMenu'
 
-const Weight = ({ date, id, weight, weightId }) => {
+const Weight = ({ date, id, weight, weightId, movingAverageWeight }) => {
   const [user, setUser] = useRecoilState(userState)
   const [optionsIsOpen, setOptionsIsOpen] = useState(false)
 
@@ -24,7 +24,7 @@ const Weight = ({ date, id, weight, weightId }) => {
       <h2 className="w-2/7">
         {weight} {user.unit}
       </h2>
-      <h2 className="w-2/7">- kg</h2>
+      <h2 className="w-2/7">{movingAverageWeight} kg</h2>
       <div>
         {/* <button
           onClick={() => setOptionsIsOpen(!optionsIsOpen)}

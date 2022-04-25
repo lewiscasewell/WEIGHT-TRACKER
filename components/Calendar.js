@@ -33,17 +33,12 @@ const Calendar = () => {
     numberOfDaysBackState
   )
 
-  // constants for building all dates to scroll through
-  const startOfLongDate = startOfYear(value)
   const endOfLongDate = new Date()
-
-  var priorDate = startOfDay(
+  let priorDate = startOfDay(
     new Date(
       new Date().setDate(startOfDay(new Date()).getDate() - numberOfDaysBack)
     )
   )
-
-  //   const [priorDate, setPriorDate] = useRecoilState(priorDateState)
 
   const distanceBetweenInDays = Math.ceil(
     (endOfLongDate.getTime() - priorDate.getTime()) / (1000 * 3600 * 24)
@@ -77,7 +72,7 @@ const Calendar = () => {
   const scrollToTopPositionOfDate = (date) => {
     const selectedDate = date.toLocaleDateString().toString()
     const indexOfSelectedDate = longPeriodGetDate.indexOf(selectedDate)
-    console.log(indexOfSelectedDate)
+
     const divToScrollIntoView = document.getElementById(indexOfSelectedDate)
     divToScrollIntoView.scrollIntoView({ behavior: 'auto' })
   }

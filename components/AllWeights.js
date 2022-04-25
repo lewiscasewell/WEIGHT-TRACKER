@@ -2,28 +2,18 @@ import { RefreshIcon } from '@heroicons/react/outline'
 import React, { useEffect, useState } from 'react'
 import AddWeight from './AddWeight'
 import Weight from './Weight'
-const {
-  addDays,
-  startOfYear,
-  startOfMonth,
-  startOfQuarter,
-  startOfDay,
-} = require('date-fns')
+const { addDays, startOfDay } = require('date-fns')
 import { useRecoilState } from 'recoil'
-import {
-  dateState,
-  numberOfDaysBackState,
-  priorDateState,
-} from '../atoms/dateAtom'
+import { dateState, numberOfDaysBackState } from '../atoms/dateAtom'
 
 const AllWeights = ({ scrollTop, myRef, onScroll, weights }) => {
   // constants for building all dates to scroll through
-  const [value, setValue] = useRecoilState(dateState)
+  const [_, setValue] = useRecoilState(dateState)
   const [numberOfDaysBack, setNumberOfDaysBack] = useRecoilState(
     numberOfDaysBackState
   )
   const endOfLongDate = new Date()
-  var priorDate = startOfDay(
+  let priorDate = startOfDay(
     new Date(
       new Date().setDate(startOfDay(new Date()).getDate() - numberOfDaysBack)
     )
@@ -39,15 +29,36 @@ const AllWeights = ({ scrollTop, myRef, onScroll, weights }) => {
   // Creating an array of objects for dates and weights.
   // Start with creating an array of objects with a date and empty weights.
   // Then replacing the object.weight value if there is a weight for that date.
+  let weightsOnlyArray = []
+  weights.map((i) => {
+    weightsOnlyArray.push(Number(i.weight))
+  })
+  weightsOnlyArray.reverse()
+  const getMovingAverage = (numbers = []) => {
+    const result = []
+    let sum = 0
+    let count = 0
+    for (let i = 0; i < numbers.length; i++) {
+      const num = numbers[i]
+      sum += num
+      count++
+      const curr = sum / count
+      result[i] = Number(curr.toFixed(1))
+    }
+    return result
+  }
+  let movingAverageWeights = getMovingAverage(weightsOnlyArray).reverse()
   let set = new Set()
-  let weightsDates = weights.map((i) => ({
+  let weightsDates = weights.map((i, idx) => ({
     date: i.date.toDate().getTime(),
     weight: Number(i.weight),
+    avgWeight: movingAverageWeights[idx],
     id: i.id,
   }))
   let longPeriodOfWeights = longPeriod.map((date) => ({
     date: date.getTime(),
     weight: null,
+    avgWeight: null,
     id: null,
   }))
   let mergedWeightsDates = [...weightsDates, ...longPeriodOfWeights]
@@ -59,7 +70,6 @@ const AllWeights = ({ scrollTop, myRef, onScroll, weights }) => {
     return false
   }, set)
   const sortedArray = uniqueArray.sort((a, b) => b.date - a.date)
-
   sortedArray.splice(
     +distanceBetweenInDays,
     sortedArray.length - distanceBetweenInDays
@@ -106,6 +116,7 @@ const AllWeights = ({ scrollTop, myRef, onScroll, weights }) => {
             date={new Date(i.date)}
             weight={i.weight}
             weightId={i.id}
+            movingAverageWeight={i.avgWeight}
           />
         ) : (
           <AddWeight id={`${idx}`} key={idx} date={new Date(i.date)} />

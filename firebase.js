@@ -6,16 +6,17 @@ import { getStorage } from 'firebase/storage'
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
+console.log(process.env.API_KEY)
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyDRS6VnHamrHXc3Cy9hEEsrZd79SCGVT1w',
-  authDomain: 'weight-tracker-6f7e0.firebaseapp.com',
-  databaseURL: 'https://weight-tracker-6f7e0-default-rtdb.firebaseio.com',
-  projectId: 'weight-tracker-6f7e0',
-  storageBucket: 'weight-tracker-6f7e0.appspot.com',
-  messagingSenderId: '881073428521',
-  appId: '1:881073428521:web:065c0d1fbd4848ff7d2438',
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 }
 
 // Initialize Firebase

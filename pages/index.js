@@ -75,6 +75,7 @@ export default function Home() {
           weights={weights}
           numberOfDaysBack={numberOfDaysBack}
           setNumberOfDaysBack={numberOfDaysBack}
+          
         />
       </MainContent>
     </div>

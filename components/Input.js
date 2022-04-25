@@ -18,7 +18,7 @@ import {
 } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import { auth, db } from '../firebase'
-import { constSelector, useRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { dateState } from '../atoms/dateAtom'
 import { modalState } from '../atoms/modalAtom'
 import { lastWeightState, userState, weightsState } from '../atoms/userAtom'
@@ -60,6 +60,8 @@ const Input = () => {
   }
 
   useEffect(() => {
+    const weightInput = document.getElementById('weight')
+    weightInput.focus()
     // set the date picker's maximum date as today's date
     const dateTimePicker = document.getElementById('dateTimePicker')
     dateTimePicker.max = new Date().toISOString().split('T')[0]

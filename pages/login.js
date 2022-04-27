@@ -20,8 +20,7 @@ const Login = () => {
     setData({ ...data, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     setData({ ...data, error: null, loading: true })
     if (!email || !password) {
       setData({ ...data, error: 'All data fields are required!' })
@@ -52,7 +51,7 @@ const Login = () => {
         <div>
           <h2>Login to an account</h2>
         </div>
-        <form onSubmit={handleSubmit}>
+        <div>
           <div className="flex flex-col">
             <label htmlFor="email">Email</label>
             <input
@@ -77,14 +76,14 @@ const Login = () => {
           ) : null}
           <div className="mt-3 flex w-full items-center justify-center">
             <button
-              type="submit"
+              onClick={() => handleSubmit()}
               className="flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
             >
               {loading ? 'Loading...' : 'Login'}{' '}
               <LoginIcon className="ml-2 h-5" />
             </button>
           </div>
-        </form>
+        </div>
         <div className="mt-3 flex flex-col">
           <text>Don't have an account?</text>
           <button onClick={() => router.push('/register')} className="">

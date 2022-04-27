@@ -76,7 +76,10 @@ const Login = () => {
             </text>
           ) : null}
           <div className="mt-3 flex w-full items-center justify-center">
-            <button className="flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white">
+            <button
+              type="submit"
+              className="flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
+            >
               {loading ? 'Loading...' : 'Login'}{' '}
               <LoginIcon className="ml-2 h-5" />
             </button>

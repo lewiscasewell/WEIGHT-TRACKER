@@ -7,6 +7,7 @@ import {
   numberOfDaysBackState,
   priorDateState,
 } from '../atoms/dateAtom'
+import Header from './Header'
 
 const {
   startOfWeek,
@@ -93,7 +94,8 @@ const Calendar = () => {
 
   return (
     <React.Fragment>
-      <div className="sticky top-0 z-10 w-full border-b-2 bg-white/30 backdrop-blur-lg">
+      <div className="sticky top-0 z-10 w-full bg-white/30 backdrop-blur-lg">
+        <Header />
         <div className="flex justify-between px-4 py-2">
           <input
             type="date"
@@ -175,12 +177,12 @@ const Calendar = () => {
             )
           )}
         </div>
-      </div>
-      <div className="flex w-full items-center justify-between bg-slate-100 px-4 py-1 text-center backdrop-blur-lg">
-        <h2 className="w-2/7">Date</h2>
-        <h2 className="w-2/7">Weight</h2>
-        <h2 className="w-2/7 mr-12">Avg.</h2>
-        <div className="w-1/7"> </div>
+        <div className="flex w-full items-center justify-between bg-slate-100 px-4 py-1 text-center backdrop-blur-lg">
+          <h2 className="w-2/7">Date</h2>
+          <h2 className="w-2/7">Weight</h2>
+          <h2 className="w-2/7 mr-12">Avg.</h2>
+          <div className="w-1/7"> </div>
+        </div>
       </div>
     </React.Fragment>
   )

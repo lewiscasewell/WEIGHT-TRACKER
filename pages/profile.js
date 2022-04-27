@@ -9,6 +9,7 @@ import Moment from 'react-moment'
 import { useRecoilState } from 'recoil'
 import { dateState } from '../atoms/dateAtom'
 import { userState } from '../atoms/userAtom'
+import Header from '../components/Header'
 import MainContent from '../components/MainContent'
 import { auth, db } from '../firebase'
 
@@ -41,6 +42,7 @@ export default function Profile() {
         <link rel="icon" href="/favicon.ico" />
       </Head> */}
       <MainContent>
+        <Header />
         <div className="p-4">
           <div className="flex items-center justify-between">
             <div>

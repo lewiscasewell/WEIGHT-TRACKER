@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { dateState } from '../atoms/dateAtom'
 import { lastWeightState, userState, weightsState } from '../atoms/userAtom'
+import Header from '../components/Header'
 import MainContent from '../components/MainContent'
 import WeightOptionsMenu from '../components/WeightOptionsMenu'
 import { auth, db } from '../firebase'
@@ -33,11 +34,12 @@ export default function Analytics() {
   }, [])
   return (
     <div>
-      <Head>
+      {/* <Head>
         <title>WEIGHT-TRACKER / analytics</title>
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Head> */}
       <MainContent>
+        <Header />
         <div className="p-4">To see weight analytics add some weights...</div>
         <div className="p-4">
           To see calorie analytics finish your profile...

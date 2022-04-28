@@ -1,3 +1,4 @@
+import { Grid } from '@chakra-ui/react'
 import { LogoutIcon } from '@heroicons/react/outline'
 import { startOfDay } from 'date-fns'
 import { signOut } from 'firebase/auth'
@@ -8,7 +9,7 @@ import React, { useEffect } from 'react'
 import Moment from 'react-moment'
 import { useRecoilState } from 'recoil'
 import { dateState } from '../atoms/dateAtom'
-import { userState } from '../atoms/userAtom'
+import { userState, weightsState } from '../atoms/userAtom'
 import Header from '../components/Header'
 import MainContent from '../components/MainContent'
 import { auth, db } from '../firebase'
@@ -16,6 +17,7 @@ import { auth, db } from '../firebase'
 export default function Profile() {
   const [user, setUser] = useRecoilState(userState)
   const [value, setValue] = useRecoilState(dateState)
+  const [weights, setWeights] = useRecoilState(weightsState)
   const router = useRouter()
 
   useEffect(() => {
@@ -52,6 +54,37 @@ export default function Profile() {
                 <Moment format="MMM DD yyyy">{user?.createdAt.toDate()}</Moment>
               </text>
             </div>
+          </div>
+
+          <div className="mt-5">
+            <h2>
+              You have logged {weights?.length}{' '}
+              {weights?.length == 1 ? 'weight' : 'weights'} with this app! 🙌
+            </h2>
+          </div>
+
+          <div className="mt-5 rounded-md bg-slate-50 p-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">Personal Details</h2>
+              <button className=" flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white">
+                Edit Profile
+              </button>
+            </div>
+            <div className="grid space-y-3 sm:grid-cols-2">
+              <span className="mt-3">Name: {user?.name}</span>
+              <span>Gender: Male</span>
+              <span>Unit: {user?.unit}</span>
+              <span>Current weight: {user?.targetWeight}</span>
+              <span>Height: 180cm</span>
+              <span>Activity level: Moderate</span>
+            </div>
+            <h2 className="mt-5 text-xl font-semibold">Personal Goals</h2>
+            <div className="grid space-y-3 sm:grid-cols-2">
+              <span className="mt-3">Target weight: {user?.targetWeight}</span>
+              <span>Goal: Cutting</span>
+            </div>
+          </div>
+          <div className="mt-5 flex w-full items-center justify-center">
             <button
               className=" flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
               onClick={handleSignout}
@@ -60,20 +93,6 @@ export default function Profile() {
               <LogoutIcon className="ml-2 h-5" />
             </button>
           </div>
-
-          <div>
-            <h2>
-              You have logged 83 weights with this app! 🙌 Current streak is 8
-              🔥
-            </h2>
-          </div>
-
-          <div className="mt-5 rounded-md bg-slate-100 p-2">
-            <h2>Unit:</h2>
-            <h2>Target weight</h2>
-            <h2>Goal</h2>
-          </div>
-          <div className="mt-5 flex w-full items-center justify-center"></div>
         </div>
       </MainContent>
     </div>

@@ -40,7 +40,14 @@ const Input = () => {
   const [weights, setWeights] = useRecoilState(weightsState)
   const [user, setUser] = useRecoilState(userState)
 
+  console.log(user)
+
   const router = useRouter()
+
+  const transformWeightConversion = (weight) => {
+    if (user.unit === 'kg') return weight
+    if (user.unit === 'lb') return (weight * 2.20462).toFixed(1)
+  }
 
   function validateOnBlur(e) {
     setInput((+e.target.value).toFixed(1))
@@ -70,7 +77,7 @@ const Input = () => {
   const handleSubmit = async () => {
     setLoading(true)
     await addDoc(collection(db, 'Weights', user.uid, 'Weight'), {
-      weight: input,
+      weight: user.unit === 'kg' ? input : (input / 2.20462).toFixed(1),
       date,
     })
     router.push('/')
@@ -112,7 +119,7 @@ const Input = () => {
         weights[indexOfWeightForSelectedDate].id
       ),
       {
-        weight: input,
+        weight: user.unit === 'kg' ? input : (input / 2.20462).toFixed(1),
       }
     )
     router.push('/')
@@ -174,7 +181,7 @@ const Input = () => {
             max={999}
             min={2}
           />
-          <span>KG</span>
+          <span>{user.unit.toUpperCase()}</span>
         </div>
         <button
           onClick={() => {

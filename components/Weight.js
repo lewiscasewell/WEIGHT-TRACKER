@@ -13,6 +13,11 @@ const Weight = ({ date, id, weight, weightId, movingAverageWeight }) => {
 
   const [modalOpen, setModalOpen] = useRecoilState(modalState)
 
+  const transformWeightConversion = (weight) => {
+    if (user.unit === 'kg') return weight
+    if (user.unit === 'lb') return (weight * 2.20462).toFixed(1)
+  }
+
   return (
     <div
       id={id}
@@ -22,9 +27,11 @@ const Weight = ({ date, id, weight, weightId, movingAverageWeight }) => {
         <Moment format={'MMM DD'}>{date}</Moment>
       </h2>
       <h2 className="w-2/7">
-        {weight} {user.unit}
+        {transformWeightConversion(weight)} {user.unit}
       </h2>
-      <h2 className="w-2/7">{movingAverageWeight} kg</h2>
+      <h2 className="w-2/7">
+        {transformWeightConversion(movingAverageWeight)} {user.unit}
+      </h2>
       <div>
         {/* <button
           onClick={() => setOptionsIsOpen(!optionsIsOpen)}

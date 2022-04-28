@@ -121,7 +121,7 @@ const Calendar = () => {
           />
           <div className="flex items-center space-x-3">
             <button
-              className="flex items-center justify-center"
+              className="flex items-center justify-center px-2 py-1"
               onClick={() => {
                 setNoMoreNext(false)
                 setWeekBefore()
@@ -131,9 +131,7 @@ const Calendar = () => {
             </button>
             <button onClick={() => setToday()}>Today</button>
             <button
-              className={`flex items-center justify-center ${
-                noMoreNext ? 'text-slate-300' : ''
-              }`}
+              className={`flex items-center justify-center px-2 py-1`}
               onClick={() => {
                 if (new Date().getTime() >= weekNextStartDate.getTime()) {
                   setWeekNext()

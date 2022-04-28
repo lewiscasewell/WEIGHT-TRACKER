@@ -5,7 +5,7 @@ import NavBar from './NavBar'
 
 const MainContent = ({ children }) => {
   return (
-    <main className="mx-auto flex max-w-7xl">
+    <main className="mx-auto flex max-w-7xl overflow-y-hidden">
       <ModalInput />
       <NavBar />
       <div className="flex h-[100vh] w-full flex-col border-r-2 bg-white sm:ml-[68px] lg:ml-[240px]">

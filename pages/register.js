@@ -24,6 +24,7 @@ const Register = () => {
 
   const handleSubmit = async () => {
     setData({ ...data, error: null, loading: true })
+
     if (!name || !email || !password) {
       setData({ ...data, error: 'All data fields are required!' })
     }

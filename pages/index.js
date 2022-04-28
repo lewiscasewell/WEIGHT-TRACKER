@@ -24,15 +24,16 @@ export default function Home() {
   const [user, setUser] = useRecoilState(userState)
   const [weights, setWeights] = useRecoilState(weightsState)
   const [lastWeight, setLastWeight] = useRecoilState(lastWeightState)
+  const [loadingWeights, setLoadingWeights] = useState(false)
   const router = useRouter()
-  const [numberOfDaysBack, setNumberOfDaysBack] = useState(90)
 
   const onScroll = () => {
     const scrollTop = myRef.current.scrollTop
     setScrollTop(scrollTop)
   }
-
+  console.log(loadingWeights)
   useEffect(async () => {
+    setLoadingWeights(true)
     if (!auth.currentUser) {
       return router.push('/login')
     }
@@ -52,16 +53,17 @@ export default function Home() {
       })
       setWeights(weights)
       setLastWeight(weights[0])
+      setLoadingWeights(false)
     })
     return () => unsub()
   }, [])
 
   return (
     <div>
-      <Head>
+      {/* <Head>
         <title>WEIGHT-TRACKER</title>
         <link rel="icon" href="/favicon.ico" />
-      </Head>
+      </Head> */}
 
       <MainContent>
         <Calendar />
@@ -70,8 +72,7 @@ export default function Home() {
           myRef={myRef}
           onScroll={onScroll}
           weights={weights}
-          numberOfDaysBack={numberOfDaysBack}
-          setNumberOfDaysBack={numberOfDaysBack}
+          loadingWeights={loadingWeights}
         />
       </MainContent>
     </div>

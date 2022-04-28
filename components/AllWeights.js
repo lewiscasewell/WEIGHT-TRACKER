@@ -5,8 +5,15 @@ import Weight from './Weight'
 const { addDays, startOfDay } = require('date-fns')
 import { useRecoilState } from 'recoil'
 import { dateState, numberOfDaysBackState } from '../atoms/dateAtom'
+import WeightSkeleton from './WeightSkeleton'
 
-const AllWeights = ({ scrollTop, myRef, onScroll, weights }) => {
+const AllWeights = ({
+  scrollTop,
+  myRef,
+  onScroll,
+  weights,
+  loadingWeights,
+}) => {
   // constants for building all dates to scroll through
   const [_, setValue] = useRecoilState(dateState)
   const [numberOfDaysBack, setNumberOfDaysBack] = useRecoilState(
@@ -104,36 +111,41 @@ const AllWeights = ({ scrollTop, myRef, onScroll, weights }) => {
   }, [scrollTop])
 
   return (
-    <div
-      ref={myRef}
-      onScroll={onScroll}
-      className="divide-y-2 overflow-y-scroll"
-    >
-      {sortedArray.map((i, idx) =>
-        i.weight ? (
-          <Weight
-            id={`${idx}`}
-            key={idx}
-            date={new Date(i.date)}
-            weight={i.weight}
-            weightId={i.id}
-            movingAverageWeight={i.avgWeight}
-          />
-        ) : (
-          <AddWeight id={`${idx}`} key={idx} date={new Date(i.date)} />
-        )
-      )}
-      <div className="flex h-[70px] w-full items-center justify-center">
-        <button
-          onClick={() => setNumberOfDaysBack(numberOfDaysBack + 90)}
-          className="flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
-        >
-          <RefreshIcon className="mr-2 h-5" />
-          Load More
-        </button>
+    <React.Fragment>
+      <div
+        ref={myRef}
+        onScroll={onScroll}
+        className="divide-y-2 overflow-y-scroll"
+      >
+        {loadingWeights &&
+          [...Array(20)].map((i, idx) => <WeightSkeleton key={idx} />)}
+        {!loadingWeights &&
+          sortedArray.map((i, idx) =>
+            i.weight ? (
+              <Weight
+                id={`${idx}`}
+                key={idx}
+                date={new Date(i.date)}
+                weight={i.weight}
+                weightId={i.id}
+                movingAverageWeight={i.avgWeight}
+              />
+            ) : (
+              <AddWeight id={`${idx}`} key={idx} date={new Date(i.date)} />
+            )
+          )}
+        <div className="flex h-[70px] w-full items-center justify-center">
+          <button
+            onClick={() => setNumberOfDaysBack(numberOfDaysBack + 90)}
+            className="flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
+          >
+            <RefreshIcon className="mr-2 h-5" />
+            Load More
+          </button>
+        </div>
+        <div className="h-[80px] w-full sm:hidden" />
       </div>
-      <div className="h-[80px] w-full sm:hidden" />
-    </div>
+    </React.Fragment>
   )
 }
 

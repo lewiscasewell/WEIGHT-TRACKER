@@ -75,7 +75,7 @@ const Calendar = () => {
     const indexOfSelectedDate = longPeriodGetDate.indexOf(selectedDate)
 
     const divToScrollIntoView = document.getElementById(indexOfSelectedDate)
-    divToScrollIntoView.scrollIntoView({ behavior: 'auto' })
+    divToScrollIntoView?.scrollIntoView({ behavior: 'auto' })
   }
 
   useEffect(() => {

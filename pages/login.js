@@ -67,6 +67,15 @@ const Login = () => {
               value={password}
               onChange={handleChange}
             />
+            {/* <div>
+                <input
+                  id="targetWeight"
+                  type="text"
+                  name="targetWeight"
+                  placeholder="Target weight"
+                  className="h-10 w-full border-b-2 border-slate-300 text-slate-900 focus:border-red-400 focus:outline-none"
+                />
+              </div> */}
           </div>
 
           {error ? (

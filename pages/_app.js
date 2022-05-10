@@ -10,7 +10,7 @@ export default function App({
   return (
     <AuthProvider>
       <RecoilRoot>
-        <Head>
+        {/* <Head>
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <meta
@@ -22,21 +22,22 @@ export default function App({
           <title>WEIGHT-TRACKER</title>
 
           <link rel="manifest" href="/manifest.json" />
-          {/* <link
+          <link
             href="/icons/favicon-16x16.png"
             rel="icon"
             type="image/png"
             sizes="16x16"
-          /> */}
-          {/* <link
+          />
+          <link
             href="/icons/favicon-32x32.png"
             rel="icon"
             type="image/png"
             sizes="32x32"
-          /> */}
-          {/* <link rel="apple-touch-icon" href="/apple-icon.png"></link> */}
+          />
+          <link rel="apple-touch-icon" href="/apple-icon.png"></link>
           <meta name="theme-color" content="#317EFB" />
-        </Head>
+        </Head> */}
+
         <Component {...pageProps} />
       </RecoilRoot>
     </AuthProvider>

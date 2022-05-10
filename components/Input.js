@@ -40,8 +40,6 @@ const Input = () => {
   const [weights, setWeights] = useRecoilState(weightsState)
   const [user, setUser] = useRecoilState(userState)
 
-  console.log(user)
-
   const router = useRouter()
 
   const transformWeightConversion = (weight) => {

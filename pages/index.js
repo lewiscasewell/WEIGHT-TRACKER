@@ -31,7 +31,7 @@ export default function Home() {
     const scrollTop = myRef.current.scrollTop
     setScrollTop(scrollTop)
   }
-  console.log(loadingWeights)
+
   useEffect(async () => {
     setLoadingWeights(true)
     if (!auth.currentUser) {

@@ -19,19 +19,23 @@ const AllWeights = ({
   const [numberOfDaysBack, setNumberOfDaysBack] = useRecoilState(
     numberOfDaysBackState
   )
-  const endOfLongDate = new Date()
+  const endOfLongDate = startOfDay(new Date())
   let priorDate = startOfDay(
     new Date(
       new Date().setDate(startOfDay(new Date()).getDate() - numberOfDaysBack)
     )
   )
 
-  const distanceBetweenInDays = Math.ceil(
-    (endOfLongDate.getTime() - priorDate.getTime()) / (1000 * 3600 * 24)
-  )
+  const distanceBetweenInDays =
+    Math.ceil(
+      (endOfLongDate.getTime() - priorDate.getTime()) / (1000 * 3600 * 24)
+    ) + 1
+
   let longPeriod = [...Array(+distanceBetweenInDays)]
     .map((_, idx) => addDays(priorDate, idx))
     .reverse()
+
+  console.log(longPeriod)
 
   // Creating an array of objects for dates and weights.
   // Start with creating an array of objects with a date and empty weights.
@@ -69,8 +73,8 @@ const AllWeights = ({
     id: null,
   }))
 
-  let mergedWeightsDates = [...weightsDates, ...longPeriodOfWeights]
-  let uniqueArray = mergedWeightsDates.filter((item) => {
+  const mergedWeightsDates = [...weightsDates, ...longPeriodOfWeights]
+  const uniqueArray = mergedWeightsDates.filter((item) => {
     if (!set.has(item.date)) {
       set.add(item.date)
       return true

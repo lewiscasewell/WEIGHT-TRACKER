@@ -2,11 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
 
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import {
-  dateState,
-  numberOfDaysBackState,
-  priorDateState,
-} from '../atoms/dateAtom'
+import { dateState, numberOfDaysBackState } from '../atoms/dateAtom'
 import Header from './Header'
 
 const {
@@ -14,7 +10,6 @@ const {
   addDays,
   nextSunday,
   format,
-  startOfYear,
   previousSaturday,
   startOfDay,
 } = require('date-fns')

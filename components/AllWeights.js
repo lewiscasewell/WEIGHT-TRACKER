@@ -35,8 +35,6 @@ const AllWeights = ({
     .map((_, idx) => addDays(priorDate, idx))
     .reverse()
 
-  console.log(longPeriod)
-
   // Creating an array of objects for dates and weights.
   // Start with creating an array of objects with a date and empty weights.
   // Then replacing the object.weight value if there is a weight for that date.
@@ -102,8 +100,8 @@ const AllWeights = ({
       longPeriod.forEach((i, idx) => {
         const heightOfElement = document
           .getElementById(idx)
-          .getBoundingClientRect().height
-        const pos = document.getElementById(idx).getBoundingClientRect().top
+          ?.getBoundingClientRect().height
+        const pos = document.getElementById(idx)?.getBoundingClientRect().top
         if (pos >= heightOfElement && pos <= 179) {
           setValue(longPeriod[idx])
         }

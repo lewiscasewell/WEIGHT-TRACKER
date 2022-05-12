@@ -128,7 +128,7 @@ const Input = () => {
 
   return (
     <div className="h-screen w-full max-w-md flex-col rounded-2xl bg-white p-2 sm:h-[280px] sm:w-fit sm:max-w-lg  sm:shadow-lg">
-      <div className="h-[70px] w-full">
+      <div className="flex h-[70px] w-full items-start">
         <button
           onClick={() => setModalOpen(false)}
           className="flex items-center justify-center rounded-full p-2 transition-colors ease-in hover:bg-slate-100 "
@@ -216,6 +216,7 @@ const Input = () => {
         />
         <button
           onClick={() => {
+            setModalOpen(false)
             {
               isEdit ? handleEdit() : handleSubmit()
             }

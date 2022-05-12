@@ -17,7 +17,7 @@ export const lastWeightState = atom({
 
 export const genderState = atom({
   key: 'gender',
-  default: 'Gender',
+  default: 'Male',
 })
 
 export const unitState = atom({
@@ -32,7 +32,7 @@ export const heightState = atom({
 
 export const activityState = atom({
   key: 'activity',
-  default: 'Activity',
+  default: null,
 })
 
 export const targetWeightState = atom({
@@ -42,5 +42,5 @@ export const targetWeightState = atom({
 
 export const goalState = atom({
   key: 'goal',
-  default: 'Goal',
+  default: null,
 })

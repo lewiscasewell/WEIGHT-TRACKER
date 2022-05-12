@@ -37,7 +37,6 @@ const Register = () => {
         email,
         createdAt: Timestamp.fromDate(new Date()),
         unit: 'kg',
-        targetWeight: 70,
       })
 
       setData({

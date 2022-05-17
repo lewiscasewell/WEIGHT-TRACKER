@@ -104,6 +104,10 @@ export default function Profile() {
     }
   }
 
+  const DetailWrapper = ({ children }) => {
+    return <div className="flex items-center justify-between">{children}</div>
+  }
+
   return (
     <div>
       {/* <Head>
@@ -132,7 +136,7 @@ export default function Profile() {
             </h2>
           </div>
 
-          <div className="mt-5 rounded-md bg-white p-4">
+          <div className="mt-5 rounded-md bg-white">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold">Personal Details</h2>
               <button
@@ -144,34 +148,28 @@ export default function Profile() {
               </button>
             </div>
             <div className="flex flex-col space-y-2 p-2 text-lg">
-              <div className="flex items-center justify-between ">
+              <DetailWrapper>
                 <label>Gender</label>
                 <label>{!gender ? '-' : gender}</label>
-              </div>
-              {/* <div className="flex items-center justify-between">
-                <label>Date of birth</label>
-                <span>{!dob ? '-' : dob}</span>
-              </div> */}
-              <div className="flex items-center justify-between">
+              </DetailWrapper>
+              <DetailWrapper>
                 <label>Unit</label>
                 <label>{!unit ? '-' : unit}</label>
-              </div>
-              <div className="flex items-center justify-between">
+              </DetailWrapper>
+              <DetailWrapper>
                 <label>Height</label>
                 <label>{!height ? '-' : height}</label>
-              </div>
-              <div className="flex items-center justify-between">
+              </DetailWrapper>
+              <DetailWrapper>
                 <label>Activity level</label>
-                <label>{!activity ? '-' : activity}</label>
-              </div>
-              <div className="flex items-center justify-between">
+                <label className="text-right">
+                  {!activity ? '-' : activity}
+                </label>
+              </DetailWrapper>
+              <DetailWrapper>
                 <label>Target Weight</label>
                 <label>{!targetWeight ? '-' : targetWeight}</label>
-              </div>
-              {/* <div className="flex items-center justify-between">
-                <label>Goal</label>
-                <label>{!goal ? '-' : goal}</label>
-              </div> */}
+              </DetailWrapper>
 
               <div className="flex flex-col">
                 <label>

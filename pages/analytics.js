@@ -15,6 +15,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
 } from 'firebase/firestore'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -54,7 +55,10 @@ export default function Analytics() {
   const [birthDate, setBirthDate] = useRecoilState(birthDateState)
   const [age, setAge] = useState(0)
   const [calories, setCalories] = useState()
-  const [additionalCals, setAdditionalCals] = useState(0)
+  const [additionalCals, setAdditionalCals] = useRecoilState(goalState)
+  const [goalEdited, setGoalEdited] = useState(false)
+  const [progressValue, setProgressValue] = useState(0)
+  const [fromTarget, setFromTarget] = useState(0)
   const router = useRouter()
 
   useEffect(async () => {
@@ -91,6 +95,13 @@ export default function Analytics() {
     return () => unsub()
   }, [])
 
+  const handleSaveGoal = async () => {
+    await updateDoc(doc(db, 'Users', auth.currentUser.uid), {
+      goal: additionalCals,
+    })
+    setGoalEdited(false)
+  }
+
   const activityOptions = [
     'Basal Metabolic rate',
     'Sedentary: Little or no exercise',
@@ -109,8 +120,30 @@ export default function Analytics() {
 
   useEffect(() => {
     calcCalories()
-  }, [weights, additionalCals])
 
+    if (targetWeight && weights.length >= 1) {
+      if (targetWeight > Number(weights[0].weight)) {
+        setFromTarget(targetWeight - Number(weights[0].weight))
+        setProgressValue(
+          (
+            ((targetWeight - Number(weights[0].weight)) / targetWeight) *
+            100
+          ).toFixed(0)
+        )
+      }
+      if (targetWeight < Number(weights[0].weight)) {
+        setFromTarget(Number(weights[0].weight) - targetWeight)
+        setProgressValue(
+          (
+            ((Number(weights[0].weight) - targetWeight) /
+              Number(weights[0].weight)) *
+            100
+          ).toFixed(0)
+        )
+      }
+    }
+  }, [weights, additionalCals])
+  console.log(progressValue)
   // const calorieFontSize = (1000 + Number(additionalCals)) / 100 + 20
 
   const calcCalories = () => {
@@ -141,20 +174,17 @@ export default function Analytics() {
           9.563 * Number(weights[0].weight) +
           1.85 * Number(height) -
           4.676 * age1
+
+        const calories =
+          Number((BMR * multipliers[activityIndex]).toFixed(0)) +
+          Number(additionalCals)
+
+        setCalories(calories)
       }
     }
   }
 
-  // console.log(birthDate)
-
-  // const calcAge = () => {
-  //   if (birthDate) {
-  //     intervalToDuration({
-  //       start: birthDate,
-  //       end: new Date()
-  //     })
-  //   }
-  // }
+  useEffect(() => {})
 
   return (
     <div>
@@ -164,47 +194,89 @@ export default function Analytics() {
       </Head> */}
       <MainContent>
         <Header />
-        <div className="p-2">
-          <div className="flex flex-col items-center justify-center">
-            <h1 className="text-xl text-slate-500">Daily calorie target</h1>
-            <h2 className="flex items-center text-center text-6xl text-slate-700">
-              {calories}{' '}
-              {/* <span style={{ fontSize: `${calorieFontSize}px` }}>🔥</span> */}
-            </h2>
-            <p className="my-2 text-xs text-slate-400">
-              {additionalCals === 0
-                ? 'Maintenance'
-                : additionalCals > 0
-                ? `${additionalCals} calorie surplus`
-                : `${0 - additionalCals} calorie deficit`}
-            </p>
-          </div>
-
-          {/* {calories
-            ? calories.map((i) => (
-                <div key={i} className="ml-2">
-                  {i} calories
+        {weights.length >= 1 && birthDate && height && gender && activity ? (
+          <div className="p-2">
+            <div className="flex flex-col items-center justify-center">
+              <h1 className="text-xl text-slate-500">Daily calorie target</h1>
+              <h2 className="flex items-center text-center text-6xl text-slate-700">
+                {calories}{' '}
+                {/* <span style={{ fontSize: `${calorieFontSize}px` }}>🔥</span> */}
+              </h2>
+              <p className="my-2 text-xs text-slate-400">
+                {additionalCals === 0
+                  ? 'Maintenance'
+                  : additionalCals > 0
+                  ? `${additionalCals} calorie surplus`
+                  : `${0 - additionalCals} calorie deficit`}
+              </p>
+              <div className="mt-6 w-full px-10">
+                <ThemeProvider theme={theme}>
+                  <Slider
+                    onChange={(e) => {
+                      setAdditionalCals(e.target.value)
+                      setGoalEdited(true)
+                    }}
+                    value={additionalCals}
+                    min={-1000}
+                    max={1000}
+                    step={50}
+                    marks={marks}
+                    valueLabelDisplay="auto"
+                    color="primary"
+                    track={false}
+                  />
+                </ThemeProvider>
+              </div>
+              <div className="my-2 h-[40px]">
+                {goalEdited && (
+                  <button
+                    className="flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
+                    onClick={handleSaveGoal}
+                  >
+                    Save goal
+                  </button>
+                )}
+              </div>
+              <div>
+                <div className="grid place-items-center bg-white">
+                  <div className="flex h-[80px] w-full items-center justify-between">
+                    <div className="flex flex-col items-center">
+                      <h1 className="text-sm text-slate-500">Current</h1>
+                      <h1 className="text-2xl text-slate-700">
+                        {weights[0].weight}kg
+                      </h1>
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <h1 className="text-sm text-slate-500">Target</h1>
+                      <h1 className="text-2xl text-slate-700">
+                        {targetWeight}kg
+                      </h1>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      background: `conic-gradient(#f87171 ${
+                        100 - progressValue
+                      }%, #fee2e2 0 ${progressValue}%)`,
+                    }}
+                    className={`relative grid h-[250px] w-[250px] place-items-center rounded-full bg-slate-500`}
+                  >
+                    <div className="absolute grid h-[84%] w-[84%] place-items-center rounded-full bg-white">
+                      <div className="flex flex-col items-center">
+                        <span className="text-4xl text-slate-700">{`${fromTarget}kg`}</span>
+                        <span className="text-xs text-slate-400">
+                          from target weight
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              ))
-            : null} */}
-          <div className="mt-6 px-10">
-            <ThemeProvider theme={theme}>
-              <Slider
-                onChange={(e) => {
-                  setAdditionalCals(e.target.value)
-                }}
-                value={additionalCals}
-                min={-1000}
-                max={1000}
-                step={50}
-                marks={marks}
-                valueLabelDisplay="auto"
-                color="primary"
-                track={false}
-              />
-            </ThemeProvider>
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div>Loading</div>
+        )}
       </MainContent>
     </div>
   )

@@ -42,7 +42,7 @@ export const targetWeightState = atom({
 
 export const goalState = atom({
   key: 'goal',
-  default: '-',
+  default: 0,
 })
 
 export const birthDateState = atom({

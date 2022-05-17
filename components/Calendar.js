@@ -43,6 +43,7 @@ const Calendar = () => {
   let longPeriod = [...Array(+distanceBetweenInDays)]
     .map((_, idx) => addDays(priorDate, idx))
     .reverse()
+
   let longPeriodGetDate = longPeriod.map((i) => i.toLocaleDateString())
 
   useEffect(() => {

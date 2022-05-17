@@ -127,10 +127,11 @@ export default function Analytics() {
           66.47 +
           13.75 * Number(weights[0].weight) +
           5.003 * Number(height) -
-          6.755 * age1 +
-          Number(additionalCals)
+          6.755 * age1
 
-        const calories = (BMR * multipliers[activityIndex]).toFixed(0)
+        const calories =
+          Number((BMR * multipliers[activityIndex]).toFixed(0)) +
+          Number(additionalCals)
 
         setCalories(calories)
       }
@@ -170,6 +171,13 @@ export default function Analytics() {
               {calories}{' '}
               {/* <span style={{ fontSize: `${calorieFontSize}px` }}>🔥</span> */}
             </h2>
+            <p className="my-2 text-xs text-slate-400">
+              {additionalCals === 0
+                ? 'Maintenance'
+                : additionalCals > 0
+                ? `${additionalCals} calorie surplus`
+                : `${0 - additionalCals} calorie deficit`}
+            </p>
           </div>
 
           {/* {calories

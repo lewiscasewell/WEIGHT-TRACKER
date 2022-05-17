@@ -8,7 +8,7 @@ const MainContent = ({ children }) => {
     <main className="mx-auto flex max-w-7xl overflow-y-hidden">
       <ModalInput />
       <NavBar />
-      <div className="flex h-[100vh] w-full flex-col border-r-2 bg-white sm:ml-[68px] lg:ml-[240px]">
+      <div className="flex h-[100vh] w-full flex-col bg-white sm:ml-[68px] sm:border-r-2 lg:ml-[240px]">
         {children}
       </div>
     </main>

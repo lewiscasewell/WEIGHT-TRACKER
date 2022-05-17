@@ -8,25 +8,31 @@ import { LoginIcon } from '@heroicons/react/outline'
 const Register = () => {
   const [data, setData] = useState({
     name: '',
+    birthDate: null,
     email: '',
     password: '',
     error: null,
     loading: false,
   })
+  // const [birthDate, setBirthDate] = useState()
 
   const router = useRouter()
 
-  const { name, email, password, error, loading } = data
+  const { name, birthDate, email, password, error, loading } = data
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value })
   }
+  // const handleBirthDateChange = (e) => {
+  //   setBirthDate(e.target.value)
+  // }
 
   const handleSubmit = async () => {
     setData({ ...data, error: null, loading: true })
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !birthDate) {
       setData({ ...data, error: 'All data fields are required!' })
+      // setBirthDate(null)
     }
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password)
@@ -37,21 +43,26 @@ const Register = () => {
         email,
         createdAt: Timestamp.fromDate(new Date()),
         unit: 'kg',
+        birthDate: Timestamp.fromDate(new Date(birthDate)),
       })
 
       setData({
         name: '',
+        birthDate: null,
         email: '',
         password: '',
         error: null,
         loading: false,
       })
+      // setBirthDate(null)
 
       router.replace('/')
     } catch (err) {
       setData({ ...data, error: err.message, loading: false })
     }
   }
+
+  const current = new Date().toISOString().split('T')[0]
 
   return (
     <div>
@@ -71,6 +82,14 @@ const Register = () => {
                 type="text"
                 name="name"
                 value={name}
+                onChange={handleChange}
+              />
+              <label htmlFor="birthDate">Birth date</label>
+              <input
+                type="date"
+                name="birthDate"
+                max={current}
+                value={birthDate}
                 onChange={handleChange}
               />
               <label htmlFor="email">Email</label>

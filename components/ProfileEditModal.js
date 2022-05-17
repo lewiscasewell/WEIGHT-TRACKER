@@ -1,11 +1,12 @@
 import { ArrowLeftIcon, XIcon } from '@heroicons/react/outline'
-import { set } from 'date-fns'
-import { doc, updateDoc } from 'firebase/firestore'
+import { format, set, startOfDay } from 'date-fns'
+import { doc, setDoc, Timestamp, updateDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { editProfileModalState } from '../atoms/modalAtom'
 import {
   activityState,
+  dobState,
   genderState,
   goalState,
   heightState,
@@ -21,23 +22,33 @@ const ProfileEditModal = () => {
   const [modalOpen, setModalOpen] = useRecoilState(editProfileModalState)
   const user = useRecoilValue(userState)
   const gender = useRecoilValue(genderState)
+  //   const [dob, setDob] = useRecoilState(dobState)
   const unit = useRecoilValue(unitState)
   const [height, setHeight] = useRecoilState(heightState)
   const activity = useRecoilValue(activityState)
   const [targetWeight, setTargetWeight] = useRecoilState(targetWeightState)
   const goal = useRecoilValue(goalState)
 
-  //   console.log(!gender ? '-' : gender)
-
   const handleSave = async () => {
+    // if (dob) {
+    //   await updateDoc(doc(db, 'Users', user.uid), {
+    //     dob: Timestamp.fromDate(new Date(dob)),
+    //   })
+    // }
     await updateDoc(doc(db, 'Users', user.uid), {
-      gender,
-      unit,
-      activity,
-      goal,
-      height,
-      targetWeight,
+      gender: gender || '',
+      unit: unit || '',
+      activity: activity || '',
+      goal: goal || '',
+      height: height || '',
+      targetWeight: targetWeight || '',
     })
+  }
+
+  //   console.log(Timestamp.fromDate(new Date(dob)))
+
+  const handleChangeInputDate = (e) => {
+    setDob(e.target.value)
   }
 
   const genderOptions = ['Male', 'Female']
@@ -70,12 +81,15 @@ const ProfileEditModal = () => {
         />
         <div
           onClick={() => {}}
-          className="absolute z-50 flex w-full items-center justify-center bg-white sm:fixed sm:left-[50%] sm:top-[5%] sm:mt-[25vh] sm:w-fit sm:translate-y-[-50%] sm:translate-x-[-50%] sm:bg-transparent"
+          className="absolute z-50 flex w-full items-center justify-center bg-white sm:fixed sm:left-[50%] sm:top-[5%] sm:mt-[300px] sm:w-fit sm:translate-y-[-50%] sm:translate-x-[-50%] sm:bg-transparent"
         >
-          <div className="h-screen w-full max-w-md flex-col rounded-2xl bg-white p-2 sm:h-[280px] sm:w-fit sm:max-w-lg  sm:shadow-lg">
-            <div className="flex h-[70px] w-full items-start justify-between">
+          <div className="h-screen w-full max-w-md flex-col rounded-2xl bg-white p-2 sm:h-full sm:w-[450px] sm:max-w-lg  sm:shadow-lg">
+            <div className="flex h-[40px] w-full items-start justify-between">
               <button
-                onClick={() => setModalOpen(false)}
+                onClick={() => {
+                  setModalOpen(false)
+                  window.location.reload(false)
+                }}
                 className="flex items-center justify-center rounded-full p-2 transition-colors ease-in hover:bg-slate-100 "
               >
                 <XIcon className="hidden h-5 sm:inline" />
@@ -91,20 +105,33 @@ const ProfileEditModal = () => {
                 Save
               </button>
             </div>
-            <div className="flex flex-col space-y-5 p-2 text-lg">
+            <div className="text-md flex flex-col space-y-5 p-2 sm:max-h-[450px] sm:overflow-scroll sm:text-lg">
               <div className="flex flex-col">
-                <label className="ml-3">Gender</label>
+                <label className="ml-2">Gender</label>
                 <ProfileListbox value={genderOptions} state={genderState} />
               </div>
 
+              {/* <div className="flex flex-col">
+                <label className="ml-2">Date of birth</label>
+                <input
+                  className="rounded-lg bg-white py-2 pl-3 pr-10 shadow-md focus:outline-none focus-visible:border-red-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-red-300"
+                  type="date"
+                  value={dob}
+                  onChange={(e) => {
+                    handleChangeInputDate(e)
+                  }}
+                />
+              </div> */}
+
               <div className="flex flex-col">
-                <label className="ml-3">Unit</label>
+                <label className="ml-2">Unit</label>
                 <ProfileListbox value={unitOptions} state={unitState} />
               </div>
 
-              <div className="flex h-[48px] flex-col">
-                <label>Height (cm)</label>
+              <div className="flex flex-col">
+                <label className="ml-2">Height (cm)</label>
                 <input
+                  className="rounded-lg bg-white py-2 pl-3 pr-10 shadow-md focus:outline-none focus-visible:border-red-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-red-300"
                   type="number"
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
@@ -113,13 +140,14 @@ const ProfileEditModal = () => {
               </div>
 
               <div className="flex flex-col">
-                <label className="ml-3">Activity level</label>
+                <label className="ml-2">Activity level</label>
                 <ProfileListbox value={activityOptions} state={activityState} />
               </div>
 
-              <div className="flex h-[48px] flex-col">
-                <label>Target weight (kg)</label>
+              <div className="flex flex-col">
+                <label className="ml-2">Target weight (kg)</label>
                 <input
+                  className="rounded-lg bg-white py-2 pl-3 pr-10 shadow-md focus:outline-none focus-visible:border-red-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-red-300"
                   type="number"
                   value={targetWeight}
                   onChange={(e) => setTargetWeight(e.target.value)}
@@ -127,10 +155,10 @@ const ProfileEditModal = () => {
                 {/* <ProfileEditNumber value={78} unit={'kg'} /> */}
               </div>
 
-              <div className="flex flex-col">
-                <label className="ml-3">Goal</label>
+              {/* <div className="flex flex-col">
+                <label className="ml-2">Goal</label>
                 <ProfileListbox value={goalOptions} state={goalState} />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

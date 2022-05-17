@@ -12,12 +12,12 @@ export const weightsState = atom({
 
 export const lastWeightState = atom({
   key: 'lastWeight',
-  default: 70,
+  default: null,
 })
 
 export const genderState = atom({
   key: 'gender',
-  default: 'Male',
+  default: '-',
 })
 
 export const unitState = atom({
@@ -27,20 +27,25 @@ export const unitState = atom({
 
 export const heightState = atom({
   key: 'height',
-  default: 180,
+  default: '-',
 })
 
 export const activityState = atom({
   key: 'activity',
-  default: null,
+  default: '-',
 })
 
 export const targetWeightState = atom({
   key: 'targetWeight',
-  default: 70,
+  default: '-',
 })
 
 export const goalState = atom({
   key: 'goal',
+  default: '-',
+})
+
+export const birthDateState = atom({
+  key: 'birthDate',
   default: null,
 })

@@ -52,7 +52,7 @@ const NavBar = () => {
 
   return (
     <div>
-      <nav className="fixed bottom-0 z-20 h-[90px] w-full border-r-2 bg-white/30 p-2 backdrop-blur-lg sm:h-full sm:w-auto sm:flex-col sm:items-center lg:w-[240px]">
+      <nav className="fixed bottom-0 z-20 h-[90px] w-full bg-white/30 p-2 backdrop-blur-lg sm:h-full sm:w-auto sm:flex-col sm:items-center sm:border-r-2 lg:w-[240px]">
         <div className="flex flex-row justify-evenly sm:mt-20 sm:mb-2.5 sm:flex-col sm:justify-start sm:space-y-2.5 sm:px-0">
           {NAV_ITEMS.map((navItem) => (
             <NavBarLink

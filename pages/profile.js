@@ -1,5 +1,6 @@
+import { async } from '@firebase/util'
 import { LogoutIcon } from '@heroicons/react/outline'
-import { startOfDay } from 'date-fns'
+import { format, startOfDay } from 'date-fns'
 import { signOut } from 'firebase/auth'
 import {
   collection,
@@ -8,8 +9,11 @@ import {
   onSnapshot,
   orderBy,
   query,
+  Timestamp,
+  updateDoc,
 } from 'firebase/firestore'
 import { useRouter } from 'next/router'
+
 import React, { useEffect, useState } from 'react'
 import Moment from 'react-moment'
 import { useRecoilState } from 'recoil'
@@ -17,6 +21,8 @@ import { dateState } from '../atoms/dateAtom'
 import { editProfileModalState } from '../atoms/modalAtom'
 import {
   activityState,
+  birthDateState,
+  dobState,
   genderState,
   goalState,
   heightState,
@@ -43,6 +49,10 @@ export default function Profile() {
   const [goal, setGoal] = useRecoilState(goalState)
   const [height, setHeight] = useRecoilState(heightState)
   const [targetWeight, setTargetWeight] = useRecoilState(targetWeightState)
+  // const [dob, setDob] = useRecoilState(dobState)
+  const [birthDate, setBirthDate] = useRecoilState(birthDateState)
+  const [isEditBirthDate, setIsEditBirthDate] = useState(false)
+  const [newBirthDate, setNewBirthDate] = useState(null)
 
   useEffect(async () => {
     if (!auth.currentUser) {
@@ -57,6 +67,7 @@ export default function Profile() {
         setGoal(docSnap.data().goal)
         setHeight(docSnap.data().height)
         setTargetWeight(docSnap.data().targetWeight)
+        setBirthDate(docSnap.data().birthDate.toDate().getTime())
       }
     })
 
@@ -80,15 +91,29 @@ export default function Profile() {
     router.push('/login')
   }
 
+  const current = new Date().toISOString().split('T')[0]
+
+  const handleSaveNewBirthDate = async () => {
+    if (newBirthDate) {
+      await updateDoc(doc(db, 'Users', auth.currentUser.uid), {
+        birthDate: Timestamp.fromDate(new Date(newBirthDate)),
+      })
+      window.location.reload(false)
+      setIsEditBirthDate(false)
+      setNewBirthDate(null)
+    }
+  }
+
   return (
     <div>
       {/* <Head>
         <title>WEIGHT-TRACKER / profile</title>
         <link rel="icon" href="/favicon.ico" />
       </Head> */}
+
+      <ProfileEditModal />
       <MainContent>
         <Header />
-        <ProfileEditModal />
         <div className="p-4">
           <div className="flex items-center justify-between">
             <div className="">
@@ -107,7 +132,7 @@ export default function Profile() {
             </h2>
           </div>
 
-          <div className="mt-5 rounded-md bg-slate-50 p-4">
+          <div className="mt-5 rounded-md bg-white p-4">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold">Personal Details</h2>
               <button
@@ -119,30 +144,64 @@ export default function Profile() {
               </button>
             </div>
             <div className="flex flex-col space-y-2 p-2 text-lg">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between ">
                 <label>Gender</label>
-                <span>{gender}</span>
+                <label>{!gender ? '-' : gender}</label>
               </div>
-
+              {/* <div className="flex items-center justify-between">
+                <label>Date of birth</label>
+                <span>{!dob ? '-' : dob}</span>
+              </div> */}
               <div className="flex items-center justify-between">
                 <label>Unit</label>
-                <label>{unit}</label>
+                <label>{!unit ? '-' : unit}</label>
               </div>
               <div className="flex items-center justify-between">
                 <label>Height</label>
-                <label>{height}</label>
+                <label>{!height ? '-' : height}</label>
               </div>
               <div className="flex items-center justify-between">
                 <label>Activity level</label>
-                <label>{activity}</label>
+                <label>{!activity ? '-' : activity}</label>
               </div>
               <div className="flex items-center justify-between">
                 <label>Target Weight</label>
-                <label>{targetWeight}</label>
+                <label>{!targetWeight ? '-' : targetWeight}</label>
               </div>
-              <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
                 <label>Goal</label>
-                <label>{goal}</label>
+                <label>{!goal ? '-' : goal}</label>
+              </div> */}
+
+              <div className="flex flex-col">
+                <label>
+                  Birth date -{' '}
+                  <span
+                    onClick={() => {
+                      isEditBirthDate
+                        ? handleSaveNewBirthDate()
+                        : setIsEditBirthDate(true)
+                    }}
+                    className="cursor-pointer text-red-400 hover:underline"
+                  >
+                    {isEditBirthDate ? 'Save' : 'Edit'}
+                  </span>
+                </label>
+                {!isEditBirthDate && (
+                  <span>
+                    {!birthDate
+                      ? ''
+                      : format(new Date(birthDate), 'dd/MM/yyyy')}
+                  </span>
+                )}
+                {isEditBirthDate && (
+                  <input
+                    type="date"
+                    max={current}
+                    value={newBirthDate}
+                    onChange={(e) => setNewBirthDate(e.target.value)}
+                  />
+                )}
               </div>
 
               {/*  <div className="flex h-[48px] items-center justify-between">

@@ -123,7 +123,7 @@ export default function Analytics() {
 
     if (targetWeight && weights.length >= 1) {
       if (targetWeight > Number(weights[0].weight)) {
-        setFromTarget(targetWeight - Number(weights[0].weight))
+        setFromTarget((targetWeight - Number(weights[0].weight)).toFixed(1))
         setProgressValue(
           (
             ((targetWeight - Number(weights[0].weight)) / targetWeight) *
@@ -132,7 +132,7 @@ export default function Analytics() {
         )
       }
       if (targetWeight < Number(weights[0].weight)) {
-        setFromTarget(Number(weights[0].weight) - targetWeight)
+        setFromTarget((Number(weights[0].weight) - targetWeight).toFixed(1))
         setProgressValue(
           (
             ((Number(weights[0].weight) - targetWeight) /

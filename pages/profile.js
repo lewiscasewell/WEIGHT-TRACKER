@@ -152,13 +152,13 @@ export default function Profile() {
                 <label>Gender</label>
                 <label>{!gender ? '-' : gender}</label>
               </DetailWrapper>
-              <DetailWrapper>
+              {/* <DetailWrapper>
                 <label>Unit</label>
                 <label>{!unit ? '-' : unit}</label>
-              </DetailWrapper>
+              </DetailWrapper> */}
               <DetailWrapper>
                 <label>Height</label>
-                <label>{!height ? '-' : height}</label>
+                <label>{!height ? '-' : height} cm</label>
               </DetailWrapper>
               <DetailWrapper>
                 <label>Activity level</label>
@@ -168,7 +168,7 @@ export default function Profile() {
               </DetailWrapper>
               <DetailWrapper>
                 <label>Target Weight</label>
-                <label>{!targetWeight ? '-' : targetWeight}</label>
+                <label>{!targetWeight ? '-' : targetWeight} kg</label>
               </DetailWrapper>
 
               <div className="flex flex-col">

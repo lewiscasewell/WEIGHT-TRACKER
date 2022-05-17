@@ -123,10 +123,10 @@ const ProfileEditModal = () => {
                 />
               </div> */}
 
-              <div className="flex flex-col">
+              {/* <div className="flex flex-col">
                 <label className="ml-2">Unit</label>
                 <ProfileListbox value={unitOptions} state={unitState} />
-              </div>
+              </div> */}
 
               <div className="flex flex-col">
                 <label className="ml-2">Height (cm)</label>

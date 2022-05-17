@@ -142,8 +142,7 @@ export default function Analytics() {
         )
       }
     }
-  }, [weights, additionalCals])
-  console.log(progressValue)
+  }, [weights, additionalCals, goal])
   // const calorieFontSize = (1000 + Number(additionalCals)) / 100 + 20
 
   const calcCalories = () => {
@@ -195,7 +194,7 @@ export default function Analytics() {
       <MainContent>
         <Header />
         {weights.length >= 1 && birthDate && height && gender && activity ? (
-          <div className="p-2">
+          <div className="overflow-scroll p-2">
             <div className="flex flex-col items-center justify-center">
               <h1 className="text-xl text-slate-500">Daily calorie target</h1>
               <h2 className="flex items-center text-center text-6xl text-slate-700">
@@ -240,13 +239,13 @@ export default function Analytics() {
               <div>
                 <div className="grid place-items-center bg-white">
                   <div className="flex h-[80px] w-full items-center justify-between">
-                    <div className="flex flex-col items-center">
+                    <div className="flex h-[110px] w-[110px] flex-col items-center justify-center rounded-full bg-slate-100 p-4">
                       <h1 className="text-sm text-slate-500">Current</h1>
                       <h1 className="text-2xl text-slate-700">
                         {weights[0].weight}kg
                       </h1>
                     </div>
-                    <div className="flex flex-col items-center">
+                    <div className="flex h-[110px] w-[110px] flex-col items-center justify-center rounded-full bg-slate-100 p-4">
                       <h1 className="text-sm text-slate-500">Target</h1>
                       <h1 className="text-2xl text-slate-700">
                         {targetWeight}kg
@@ -272,10 +271,14 @@ export default function Analytics() {
                   </div>
                 </div>
               </div>
+              <div className="h-[100px]"></div>
             </div>
           </div>
         ) : (
-          <div>Loading</div>
+          <div className="p-2">
+            Finish all profile fields and log at least one weight to see
+            analytics.
+          </div>
         )}
       </MainContent>
     </div>

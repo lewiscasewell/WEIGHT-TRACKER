@@ -1,13 +1,11 @@
-import { DocumentDownloadIcon } from '@heroicons/react/outline'
 import { createTheme, Slider, ThemeProvider } from '@mui/material'
 import { red } from '@mui/material/colors'
 const theme = createTheme({
   palette: {
-    primary: { main: red[300] },
+    primary: { main: '#f87171' },
   },
 })
 import { intervalToDuration, startOfDay } from 'date-fns'
-import { da } from 'date-fns/locale'
 import {
   collection,
   doc,
@@ -17,7 +15,6 @@ import {
   query,
   updateDoc,
 } from 'firebase/firestore'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
@@ -36,8 +33,6 @@ import {
 } from '../atoms/userAtom'
 import Header from '../components/Header'
 import MainContent from '../components/MainContent'
-import WeightChart from '../components/WeightChart'
-import WeightOptionsMenu from '../components/WeightOptionsMenu'
 import { auth, db } from '../firebase'
 
 export default function Analytics() {
@@ -59,6 +54,7 @@ export default function Analytics() {
   const [goalEdited, setGoalEdited] = useState(false)
   const [progressValue, setProgressValue] = useState(0)
   const [fromTarget, setFromTarget] = useState(0)
+  const [daysToTarget, setDaysToTarget] = useState(0)
   const router = useRouter()
 
   useEffect(async () => {
@@ -130,6 +126,16 @@ export default function Analytics() {
             100
           ).toFixed(0)
         )
+        if (additionalCals > 0) {
+          setDaysToTarget(
+            (
+              ((targetWeight - Number(weights[0].weight)) * 7700) /
+              additionalCals
+            ).toFixed(0)
+          )
+        } else {
+          setDaysToTarget(0)
+        }
       }
       if (targetWeight < Number(weights[0].weight)) {
         setFromTarget((Number(weights[0].weight) - targetWeight).toFixed(1))
@@ -140,10 +146,19 @@ export default function Analytics() {
             100
           ).toFixed(0)
         )
+        if (additionalCals < 0) {
+          setDaysToTarget(
+            (
+              ((Number(weights[0].weight) - targetWeight) * 7700) /
+              (0 - additionalCals)
+            ).toFixed(0)
+          )
+        } else {
+          setDaysToTarget(0)
+        }
       }
     }
   }, [weights, additionalCals, goal])
-  // const calorieFontSize = (1000 + Number(additionalCals)) / 100 + 20
 
   const calcCalories = () => {
     if (weights.length >= 1 && birthDate && height && gender && activity) {
@@ -183,8 +198,6 @@ export default function Analytics() {
     }
   }
 
-  useEffect(() => {})
-
   return (
     <div>
       {/* <Head>
@@ -199,7 +212,6 @@ export default function Analytics() {
               <h1 className="text-xl text-slate-500">Daily calorie target</h1>
               <h2 className="flex items-center text-center text-6xl text-slate-700">
                 {calories}{' '}
-                {/* <span style={{ fontSize: `${calorieFontSize}px` }}>🔥</span> */}
               </h2>
               <p className="my-2 text-xs text-slate-400">
                 {additionalCals === 0
@@ -260,13 +272,21 @@ export default function Analytics() {
                     }}
                     className={`relative grid h-[250px] w-[250px] place-items-center rounded-full bg-slate-500`}
                   >
-                    <div className="absolute grid h-[84%] w-[84%] place-items-center rounded-full bg-white">
+                    <div className="absolute flex h-[84%] w-[84%] flex-col place-items-center justify-center rounded-full bg-white">
                       <div className="flex flex-col items-center">
                         <span className="text-4xl text-slate-700">{`${fromTarget}kg`}</span>
                         <span className="text-xs text-slate-400">
                           from target weight
                         </span>
                       </div>
+                      {daysToTarget !== 0 && (
+                        <div className="mt-3 flex flex-col items-center">
+                          <span className="text-xl text-slate-600">{`~${daysToTarget} days`}</span>
+                          <span className="text-xs text-slate-400">
+                            to reach target weight
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

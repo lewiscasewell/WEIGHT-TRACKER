@@ -140,6 +140,7 @@ export default function Profile() {
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold">Personal Details</h2>
               <button
+                className="flex w-fit items-center rounded-md border-2 border-slate-700 py-1 px-2 text-slate-700 transition-colors ease-in hover:bg-slate-700 hover:text-white"
                 onClick={() => {
                   setModalOpen(true)
                 }}

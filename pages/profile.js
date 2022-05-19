@@ -206,7 +206,7 @@ export default function Profile() {
                 {isEditBirthDate && (
                   <input
                     type="date"
-                    className="bg-transparent"
+                    className="peer h-10 w-full border-b-2 border-gray-300 bg-transparent text-gray-900 placeholder-transparent focus:border-red-400 focus:outline-none"
                     max={current}
                     value={newBirthDate}
                     placeholder="yyyy-mm-dd"

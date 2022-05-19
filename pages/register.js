@@ -109,7 +109,7 @@ const Register = () => {
                 value={birthDate}
                 max={current}
                 onChange={handleChange}
-                className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:border-red-400 focus:outline-none"
+                className="peer h-10 w-full border-b-2 border-gray-300 bg-transparent text-gray-900 placeholder-transparent focus:border-red-400 focus:outline-none"
               />
               <label
                 hmtlFor="birthDate"

@@ -6,19 +6,8 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <link rel="manifest" href="/manifest.json" />
-          <link
-            href="/icons/favicon-16x16.png"
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-          />
-          <link
-            href="/icons/favicon-32x32.png"
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-          />
-          <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+          <link href="/icons/32.png" rel="icon" type="image/png" />
+          <link rel="apple-touch-icon" href="/icons/192.png" />
           <meta name="theme-color" content="#fff" />
           <meta name="apple-mobile-web-app-status-bar-style" content="white" />
           <title>WEIGHT-TRACKER</title>

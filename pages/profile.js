@@ -185,6 +185,16 @@ export default function Profile() {
                   >
                     {isEditBirthDate ? 'Save' : 'Edit'}
                   </span>
+                  {isEditBirthDate && (
+                    <span
+                      onClick={() => {
+                        setIsEditBirthDate(false)
+                      }}
+                      className="ml-4 cursor-pointer text-red-400 hover:underline"
+                    >
+                      Cancel
+                    </span>
+                  )}
                 </label>
                 {!isEditBirthDate && (
                   <span>
@@ -198,6 +208,7 @@ export default function Profile() {
                     type="date"
                     max={current}
                     value={newBirthDate}
+                    placeholder="yyyy-mm-dd"
                     onChange={(e) => setNewBirthDate(e.target.value)}
                   />
                 )}

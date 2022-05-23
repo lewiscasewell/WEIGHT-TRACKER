@@ -3,7 +3,7 @@ import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { useRecoilState } from 'recoil'
 
-export default function ProfileListbox({ value, state, initialValue }) {
+export default function ProfileListbox({ value, state }) {
   const [selected, setSelected] = useRecoilState(state)
 
   return (

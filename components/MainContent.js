@@ -1,5 +1,4 @@
 import React from 'react'
-import Header from './Header'
 import ModalInput from './ModalInput'
 import NavBar from './NavBar'
 

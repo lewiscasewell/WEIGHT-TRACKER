@@ -1,5 +1,4 @@
 import { createTheme, Slider, ThemeProvider } from '@mui/material'
-import { red } from '@mui/material/colors'
 const theme = createTheme({
   palette: {
     primary: { main: '#f87171' },
@@ -48,7 +47,6 @@ export default function Analytics() {
   const [height, setHeight] = useRecoilState(heightState)
   const [targetWeight, setTargetWeight] = useRecoilState(targetWeightState)
   const [birthDate, setBirthDate] = useRecoilState(birthDateState)
-  const [age, setAge] = useState(0)
   const [calories, setCalories] = useState()
   const [additionalCals, setAdditionalCals] = useRecoilState(goalState)
   const [goalEdited, setGoalEdited] = useState(false)
@@ -200,14 +198,10 @@ export default function Analytics() {
 
   return (
     <div>
-      {/* <Head>
-        <title>WEIGHT-TRACKER / analytics</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head> */}
       <MainContent>
         <Header />
         {weights.length >= 1 && birthDate && height && gender && activity ? (
-          <div className="overflow-scroll p-2">
+          <div className="overflow-y-scroll p-2">
             <div className="flex flex-col items-center justify-center">
               <h1 className="text-xl text-slate-500">Daily calorie target</h1>
               <h2 className="flex items-center text-center text-6xl text-slate-700">

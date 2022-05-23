@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 
 const NavBarLink = ({ Icon, text, active }) => {
   const router = useRouter()
+
   return (
     <div
       onClick={() => {

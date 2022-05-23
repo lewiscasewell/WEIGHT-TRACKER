@@ -1,12 +1,10 @@
 import { ArrowLeftIcon, XIcon } from '@heroicons/react/outline'
-import { format, set, startOfDay } from 'date-fns'
-import { doc, setDoc, Timestamp, updateDoc } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import { doc, updateDoc } from 'firebase/firestore'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { editProfileModalState } from '../atoms/modalAtom'
+import React from 'react'
 import {
   activityState,
-  dobState,
   genderState,
   goalState,
   heightState,
@@ -15,14 +13,12 @@ import {
   userState,
 } from '../atoms/userAtom'
 import { db } from '../firebase'
-import ProfileEditNumber from './ProfileEditNumber'
 import ProfileListbox from './ProfileListbox'
 
 const ProfileEditModal = () => {
   const [modalOpen, setModalOpen] = useRecoilState(editProfileModalState)
   const user = useRecoilValue(userState)
   const gender = useRecoilValue(genderState)
-  //   const [dob, setDob] = useRecoilState(dobState)
   const unit = useRecoilValue(unitState)
   const [height, setHeight] = useRecoilState(heightState)
   const activity = useRecoilValue(activityState)
@@ -30,11 +26,6 @@ const ProfileEditModal = () => {
   const goal = useRecoilValue(goalState)
 
   const handleSave = async () => {
-    // if (dob) {
-    //   await updateDoc(doc(db, 'Users', user.uid), {
-    //     dob: Timestamp.fromDate(new Date(dob)),
-    //   })
-    // }
     await updateDoc(doc(db, 'Users', user.uid), {
       gender: gender || '',
       unit: unit || '',
@@ -45,14 +36,8 @@ const ProfileEditModal = () => {
     })
   }
 
-  //   console.log(Timestamp.fromDate(new Date(dob)))
-
-  const handleChangeInputDate = (e) => {
-    setDob(e.target.value)
-  }
-
   const genderOptions = ['Male', 'Female']
-  const unitOptions = ['kg']
+  // const unitOptions = ['kg']
   const activityOptions = [
     'Basal Metabolic rate',
     'Sedentary: Little or no exercise',
@@ -61,15 +46,6 @@ const ProfileEditModal = () => {
     'Active: Daily exercise or intense exercise 3-4 times/week',
     'Very Active: intense exercise 6-7 time/week',
     'Extra Active: very intense exercise daily, or physical job',
-  ]
-  const goalOptions = [
-    'Extreme cut',
-    'Cut',
-    'Slow cut',
-    'Maintain',
-    'Slow bulk',
-    'Bulk',
-    'Extreme bulk',
   ]
 
   return (
@@ -112,18 +88,6 @@ const ProfileEditModal = () => {
               </div>
 
               {/* <div className="flex flex-col">
-                <label className="ml-2">Date of birth</label>
-                <input
-                  className="rounded-lg bg-white py-2 pl-3 pr-10 shadow-md focus:outline-none focus-visible:border-red-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-red-300"
-                  type="date"
-                  value={dob}
-                  onChange={(e) => {
-                    handleChangeInputDate(e)
-                  }}
-                />
-              </div> */}
-
-              {/* <div className="flex flex-col">
                 <label className="ml-2">Unit</label>
                 <ProfileListbox value={unitOptions} state={unitState} />
               </div> */}
@@ -136,7 +100,6 @@ const ProfileEditModal = () => {
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
                 />
-                {/* <ProfileEditNumber value={180} unit={'cm'} /> */}
               </div>
 
               <div className="flex flex-col">
@@ -152,13 +115,7 @@ const ProfileEditModal = () => {
                   value={targetWeight}
                   onChange={(e) => setTargetWeight(e.target.value)}
                 />
-                {/* <ProfileEditNumber value={78} unit={'kg'} /> */}
               </div>
-
-              {/* <div className="flex flex-col">
-                <label className="ml-2">Goal</label>
-                <ProfileListbox value={goalOptions} state={goalState} />
-              </div> */}
             </div>
           </div>
         </div>

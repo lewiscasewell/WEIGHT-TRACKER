@@ -54,15 +54,12 @@ const Calendar = () => {
   }, [priorDate])
 
   function setToday() {
-    // setValue(new Date())
     scrollToTopPositionOfDate(endOfLongDate)
   }
   function setWeekNext() {
-    // setValue(weekNextStartDate)
     scrollToTopPositionOfDate(weekNextStartDate)
   }
   function setWeekBefore() {
-    // setValue(weekBeforeStartDate)
     scrollToTopPositionOfDate(weekBeforeStartDate)
   }
 
@@ -77,7 +74,6 @@ const Calendar = () => {
   useEffect(() => {
     const datePickerId = document.getElementById('datePickerId')
     datePickerId.max = new Date().toISOString().split('T')[0]
-    // datePickerId.min = startOfLongDate.toISOString().split('T')[0]
 
     if (startOfDay(new Date()).getTime() < weekNextStartDate.getTime()) {
       setNoMoreNext(true)
@@ -148,7 +144,6 @@ const Calendar = () => {
               <div
                 key={i}
                 onClick={() => {
-                  //   setValue(i)
                   scrollToTopPositionOfDate(i)
                 }}
                 className={`flex flex-col justify-center px-2 py-1 hover:cursor-pointer hover:bg-slate-200/30 hover:backdrop-blur-lg ${

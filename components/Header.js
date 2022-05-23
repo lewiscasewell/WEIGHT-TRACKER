@@ -14,28 +14,17 @@ const Header = () => {
     title.unshift(router.asPath.split('')[1].toUpperCase())
   }
 
-  const handleUnitChange = async (e) => {
-    await updateDoc(doc(db, 'Users', user.uid), {
-      unit: e.target.value,
-    })
-  }
+  // const handleUnitChange = async (e) => {
+  //   await updateDoc(doc(db, 'Users', user.uid), {
+  //     unit: e.target.value,
+  //   })
+  // }
 
   return (
-    <div className="sticky top-0 z-10 flex w-full items-center justify-between bg-white/30 p-2 backdrop-blur-lg">
-      <h2 className="font-bold">
+    <div className="sticky top-0 z-10 flex w-full bg-white/30 p-2 backdrop-blur-lg">
+      <h2 className="px-2 font-bold">
         {router.asPath === '/' ? 'Weights' : title.join('')}
       </h2>
-      <div className="">
-        {/* <select
-          id="unit"
-          className="rounded-md bg-transparent px-4 py-1 outline-none hover:bg-slate-100"
-          onChange={(e) => handleUnitChange(e)}
-          //   defaultValue={user.unit}
-        >
-          <option value="kg">kg</option>
-          <option value="lb">lb</option>
-        </select> */}
-      </div>
     </div>
   )
 }

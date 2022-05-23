@@ -10,34 +10,25 @@ export default function App({
   return (
     <AuthProvider>
       <RecoilRoot>
-        {/* <Head>
-          <meta charSet="utf-8" />
-          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <Head>
+          <link rel="manifest" href="/manifest.json" />
+          <link href="/icons/32.png" rel="icon" type="image/png" />
+          <link rel="apple-touch-icon" href="/icons/192.png" />
+          <meta name="theme-color" content="#fff" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="white" />
+          <title>WEIGHT-TRACKER</title>
+          <meta
+            name="description"
+            content="A PWA to log and track weights and see analytics for the number of calories you should consume in order to reach your weight goals"
+          />
+          <meta charset="UTF-8" />
           <meta
             name="viewport"
-            content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+            content="width=device-width, initial-scale=1.0"
           />
-          <meta name="description" content="Description" />
-          <meta name="keywords" content="Keywords" />
-          <title>WEIGHT-TRACKER</title>
-
-          <link rel="manifest" href="/manifest.json" />
-          <link
-            href="/icons/favicon-16x16.png"
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-          />
-          <link
-            href="/icons/favicon-32x32.png"
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-          />
-          <link rel="apple-touch-icon" href="/apple-icon.png"></link>
-          <meta name="theme-color" content="#317EFB" />
-        </Head> */}
-
+          <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+          <meta name="theme-color" />
+        </Head>
         <Component {...pageProps} />
       </RecoilRoot>
     </AuthProvider>

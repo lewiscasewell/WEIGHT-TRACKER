@@ -22,7 +22,6 @@ import { editProfileModalState } from '../atoms/modalAtom'
 import {
   activityState,
   birthDateState,
-  dobState,
   genderState,
   goalState,
   heightState,
@@ -49,7 +48,6 @@ export default function Profile() {
   const [goal, setGoal] = useRecoilState(goalState)
   const [height, setHeight] = useRecoilState(heightState)
   const [targetWeight, setTargetWeight] = useRecoilState(targetWeightState)
-  // const [dob, setDob] = useRecoilState(dobState)
   const [birthDate, setBirthDate] = useRecoilState(birthDateState)
   const [isEditBirthDate, setIsEditBirthDate] = useState(false)
   const [newBirthDate, setNewBirthDate] = useState(null)
@@ -110,11 +108,6 @@ export default function Profile() {
 
   return (
     <div>
-      {/* <Head>
-        <title>WEIGHT-TRACKER / profile</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head> */}
-
       <ProfileEditModal />
       <MainContent>
         <Header />
@@ -213,26 +206,6 @@ export default function Profile() {
                   />
                 )}
               </div>
-
-              {/*  <div className="flex h-[48px] items-center justify-between">
-                <label>Height</label>
-                <ProfileEditNumber value={180} unit={'cm'} />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <label>Activity level</label>
-                <ProfileListbox value={activityOptions} />
-              </div>
-
-              <div className="flex h-[48px] items-center justify-between">
-                <label>Target weight</label>
-                <ProfileEditNumber value={78} unit={'kg'} />
-              </div>
-
-              <div className="flex items-center justify-between">
-                <label>Goal</label>
-                <ProfileListbox value={goalOptions} />
-              </div> */}
             </div>
           </div>
           <div className="mt-5 flex w-full items-center justify-center">

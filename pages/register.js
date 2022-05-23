@@ -15,7 +15,6 @@ const Register = () => {
     error: null,
     loading: false,
   })
-  // const [birthDate, setBirthDate] = useState()
 
   const router = useRouter()
 
@@ -24,16 +23,12 @@ const Register = () => {
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value })
   }
-  // const handleBirthDateChange = (e) => {
-  //   setBirthDate(e.target.value)
-  // }
 
   const handleSubmit = async () => {
     setData({ ...data, error: null, loading: true })
 
     if (!name || !email || !password || !birthDate) {
       setData({ ...data, error: 'All data fields are required!' })
-      // setBirthDate(null)
     }
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password)
@@ -55,7 +50,6 @@ const Register = () => {
         error: null,
         loading: false,
       })
-      // setBirthDate(null)
 
       router.replace('/')
     } catch (err) {

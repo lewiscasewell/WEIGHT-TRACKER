@@ -5,17 +5,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline'
 import { format, startOfDay } from 'date-fns'
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  onSnapshot,
-  orderBy,
-  query,
-  serverTimestamp,
-  updateDoc,
-} from 'firebase/firestore'
+import { addDoc, collection, doc, updateDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import { auth, db } from '../firebase'
 import { useRecoilState } from 'recoil'
@@ -42,10 +32,10 @@ const Input = () => {
 
   const router = useRouter()
 
-  const transformWeightConversion = (weight) => {
-    if (user.unit === 'kg') return weight
-    if (user.unit === 'lb') return (weight * 2.20462).toFixed(1)
-  }
+  // const transformWeightConversion = (weight) => {
+  //   if (user.unit === 'kg') return weight
+  //   if (user.unit === 'lb') return (weight * 2.20462).toFixed(1)
+  // }
 
   function validateOnBlur(e) {
     setInput((+e.target.value).toFixed(1))

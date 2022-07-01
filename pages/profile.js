@@ -30,6 +30,7 @@ import {
   userState,
   weightsState,
 } from '../atoms/userAtom'
+import ActitiyLevelTooltip from '../components/ActivityLevelToolTip'
 import Header from '../components/Header'
 import MainContent from '../components/MainContent'
 import ProfileEditModal from '../components/ProfileEditModal'
@@ -155,7 +156,12 @@ export default function Profile() {
                 <label>{!height ? '-' : height} cm</label>
               </DetailWrapper>
               <DetailWrapper>
-                <label>Activity level</label>
+                <label className="flex items-center">
+                  Activity level
+                  <span className="ml-2">
+                    <ActitiyLevelTooltip />
+                  </span>
+                </label>
                 <label className="text-right">
                   {!activity ? '-' : activity}
                 </label>

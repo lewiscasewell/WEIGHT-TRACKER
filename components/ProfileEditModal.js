@@ -14,6 +14,7 @@ import {
 } from '../atoms/userAtom'
 import { db } from '../firebase'
 import ProfileListbox from './ProfileListbox'
+import ActitiyLevelTooltip from './ActivityLevelToolTip'
 
 const ProfileEditModal = () => {
   const [modalOpen, setModalOpen] = useRecoilState(editProfileModalState)
@@ -40,12 +41,12 @@ const ProfileEditModal = () => {
   // const unitOptions = ['kg']
   const activityOptions = [
     'Basal Metabolic rate',
-    'Sedentary: Little or no exercise',
-    'Light: Exercise 1-3 times/week',
-    'Moderate: exercise 4-5 times/week',
-    'Active: Daily exercise or intense exercise 3-4 times/week',
-    'Very Active: intense exercise 6-7 time/week',
-    'Extra Active: very intense exercise daily, or physical job',
+    'Sedentary',
+    'Light',
+    'Moderate',
+    'Active',
+    'Very Active',
+    'Extra Active',
   ]
 
   return (
@@ -103,7 +104,13 @@ const ProfileEditModal = () => {
               </div>
 
               <div className="flex flex-col">
-                <label className="ml-2">Activity level</label>
+                <label className="ml-2 flex items-center">
+                  Activity level
+                  <span className="ml-2">
+                    <ActitiyLevelTooltip />
+                  </span>
+                </label>
+
                 <ProfileListbox value={activityOptions} state={activityState} />
               </div>
 

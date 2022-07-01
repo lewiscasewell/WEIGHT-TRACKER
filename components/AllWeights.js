@@ -136,7 +136,7 @@ const AllWeights = ({
               <AddWeight id={`${idx}`} key={idx} date={new Date(i.date)} />
             )
           )}
-        <div className="flex h-[70px] w-full items-center justify-center">
+        <div className="mb-[100px] flex h-[70px] w-full items-center justify-center">
           <button
             onClick={() => setNumberOfDaysBack(numberOfDaysBack + 90)}
             className="flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
@@ -145,7 +145,6 @@ const AllWeights = ({
             Load More
           </button>
         </div>
-        <div className="h-[80px] w-full sm:hidden" />
       </div>
     </React.Fragment>
   )

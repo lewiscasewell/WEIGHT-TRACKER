@@ -98,12 +98,12 @@ export default function Analytics() {
 
   const activityOptions = [
     'Basal Metabolic rate',
-    'Sedentary: Little or no exercise',
-    'Light: Exercise 1-3 times/week',
-    'Moderate: exercise 4-5 times/week',
-    'Active: Daily exercise or intense exercise 3-4 times/week',
-    'Very Active: intense exercise 6-7 time/week',
-    'Extra Active: very intense exercise daily, or physical job',
+    'Sedentary',
+    'Light',
+    'Moderate',
+    'Active',
+    'Very Active',
+    'Extra Active',
   ]
   const activityIndex = activityOptions.indexOf(activity)
   const marks = [

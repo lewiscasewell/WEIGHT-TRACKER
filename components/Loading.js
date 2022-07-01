@@ -4,7 +4,6 @@ const Loading = () => {
   return (
     <div className="flex min-h-screen w-full flex-col items-center justify-center">
       <h2 className="animate-spin text-4xl">💪</h2>
-      <h2 className="">Loading your weights...</h2>
     </div>
   )
 }

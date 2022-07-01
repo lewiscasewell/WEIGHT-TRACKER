@@ -32,6 +32,7 @@ import {
 } from '../atoms/userAtom'
 import ActitiyLevelTooltip from '../components/ActivityLevelToolTip'
 import Header from '../components/Header'
+import Loading from '../components/Loading'
 import MainContent from '../components/MainContent'
 import ProfileEditModal from '../components/ProfileEditModal'
 import { auth, db } from '../firebase'
@@ -54,6 +55,7 @@ export default function Profile() {
   const [newBirthDate, setNewBirthDate] = useState(null)
 
   useEffect(async () => {
+    setLoadingWeights(true)
     if (!auth.currentUser) {
       return router.push('/login')
     }
@@ -112,6 +114,7 @@ export default function Profile() {
       <ProfileEditModal />
       <MainContent>
         <Header />
+        {loadingWeights && <Loading />}
         <div className="p-4">
           <div className="flex items-center justify-between">
             <div className="">

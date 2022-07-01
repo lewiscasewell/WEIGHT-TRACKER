@@ -32,6 +32,7 @@ import {
 } from '../atoms/userAtom'
 import Header from '../components/Header'
 import MainContent from '../components/MainContent'
+import Loading from '../components/Loading'
 import { auth, db } from '../firebase'
 
 export default function Analytics() {
@@ -56,6 +57,7 @@ export default function Analytics() {
   const router = useRouter()
 
   useEffect(async () => {
+    setLoadingWeights(true)
     if (!auth.currentUser) {
       return router.push('/login')
     }
@@ -200,6 +202,7 @@ export default function Analytics() {
     <div>
       <MainContent>
         <Header />
+        {loadingWeights && <Loading />}
         {weights.length >= 1 && birthDate && height && gender && activity ? (
           <div className="overflow-y-scroll p-2">
             <div className="flex flex-col items-center justify-center">
@@ -242,49 +245,51 @@ export default function Analytics() {
                   </button>
                 )}
               </div>
-              <div>
-                <div className="grid place-items-center bg-white">
-                  <div className="flex h-[80px] w-full items-center justify-between">
-                    <div className="flex h-[110px] w-[110px] flex-col items-center justify-center rounded-full bg-slate-100 p-4">
-                      <h1 className="text-sm text-slate-500">Current</h1>
-                      <h1 className="text-2xl text-slate-700">
-                        {weights[0].weight}kg
-                      </h1>
-                    </div>
-                    <div className="flex h-[110px] w-[110px] flex-col items-center justify-center rounded-full bg-slate-100 p-4">
-                      <h1 className="text-sm text-slate-500">Target</h1>
-                      <h1 className="text-2xl text-slate-700">
-                        {targetWeight}kg
-                      </h1>
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      background: `conic-gradient(#f87171 ${
-                        100 - progressValue
-                      }%, #fee2e2 0 ${progressValue}%)`,
-                    }}
-                    className={`relative grid h-[250px] w-[250px] place-items-center rounded-full bg-slate-500`}
-                  >
-                    <div className="absolute flex h-[84%] w-[84%] flex-col place-items-center justify-center rounded-full bg-white">
-                      <div className="flex flex-col items-center">
-                        <span className="text-4xl text-slate-700">{`${fromTarget}kg`}</span>
-                        <span className="text-xs text-slate-400">
-                          from target weight
-                        </span>
+              {targetWeight && (
+                <div>
+                  <div className="grid place-items-center bg-white">
+                    <div className="flex h-[80px] w-full items-center justify-between">
+                      <div className="flex h-[110px] w-[110px] flex-col items-center justify-center rounded-full bg-slate-100 p-4">
+                        <h1 className="text-sm text-slate-500">Current</h1>
+                        <h1 className="text-2xl text-slate-700">
+                          {weights[0].weight}kg
+                        </h1>
                       </div>
-                      {daysToTarget !== 0 && (
-                        <div className="mt-3 flex flex-col items-center">
-                          <span className="text-xl text-slate-600">{`~${daysToTarget} days`}</span>
+                      <div className="flex h-[110px] w-[110px] flex-col items-center justify-center rounded-full bg-slate-100 p-4">
+                        <h1 className="text-sm text-slate-500">Target</h1>
+                        <h1 className="text-2xl text-slate-700">
+                          {targetWeight}kg
+                        </h1>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        background: `conic-gradient(#f87171 ${
+                          100 - progressValue
+                        }%, #fee2e2 0 ${progressValue}%)`,
+                      }}
+                      className={`relative grid h-[250px] w-[250px] place-items-center rounded-full bg-slate-500`}
+                    >
+                      <div className="absolute flex h-[84%] w-[84%] flex-col place-items-center justify-center rounded-full bg-white">
+                        <div className="flex flex-col items-center">
+                          <span className="text-4xl text-slate-700">{`${fromTarget}kg`}</span>
                           <span className="text-xs text-slate-400">
-                            to reach target weight
+                            from target weight
                           </span>
                         </div>
-                      )}
+                        {daysToTarget !== 0 && (
+                          <div className="mt-3 flex flex-col items-center">
+                            <span className="text-xl text-slate-600">{`~${daysToTarget} days`}</span>
+                            <span className="text-xs text-slate-400">
+                              to reach target weight
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
               <div className="h-[100px]"></div>
             </div>
           </div>

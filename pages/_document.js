@@ -23,7 +23,7 @@ class MyDocument extends Document {
           <meta http-equiv="X-UA-Compatible" content="ie=edge" />
           <meta name="theme-color" /> */}
         </Head>
-        <body style={{ overflowY: 'hidden' }}>
+        <body style={{ maxHeight: '-webkit-fill-available' }}>
           <Main />
           <NextScript />
         </body>

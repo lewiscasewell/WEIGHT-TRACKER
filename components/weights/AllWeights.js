@@ -2,10 +2,11 @@ import { RefreshIcon } from '@heroicons/react/outline'
 import React, { useEffect, useState } from 'react'
 import AddWeight from './AddWeight'
 import Weight from './Weight'
-const { addDays, startOfDay } = require('date-fns')
+import { addDays, startOfDay } from 'date-fns'
 import { useRecoilState } from 'recoil'
-import { dateState, numberOfDaysBackState } from '../atoms/dateAtom'
+import { dateState, numberOfDaysBackState } from '../../atoms/dateAtom'
 import WeightSkeleton from './WeightSkeleton'
+import Button from '../ui/Button'
 
 const AllWeights = ({
   scrollTop,
@@ -14,25 +15,23 @@ const AllWeights = ({
   weights,
   loadingWeights,
 }) => {
-  // constants for building all dates to scroll through
   const [_, setValue] = useRecoilState(dateState)
   const [numberOfDaysBack, setNumberOfDaysBack] = useRecoilState(
     numberOfDaysBackState
   )
-  const endOfLongDate = startOfDay(new Date())
-  let priorDate = startOfDay(
+  const endDate = startOfDay(new Date())
+  const startDate = startOfDay(
     new Date(
       new Date().setDate(startOfDay(new Date()).getDate() - numberOfDaysBack)
     )
   )
 
-  const distanceBetweenInDays =
-    Math.ceil(
-      (endOfLongDate.getTime() - priorDate.getTime()) / (1000 * 3600 * 24)
-    ) + 1
+  const numberOfDaysBetweenStartAndEnd =
+    Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)) +
+    1
 
-  let longPeriod = [...Array(+distanceBetweenInDays)]
-    .map((_, idx) => addDays(priorDate, idx))
+  const arrayOfAllDatesToRender = [...Array(+numberOfDaysBetweenStartAndEnd)]
+    .map((_, idx) => addDays(startDate, idx))
     .reverse()
 
   // Creating an array of objects for dates and weights.
@@ -64,7 +63,7 @@ const AllWeights = ({
     avgWeight: movingAverageWeights[idx],
     id: i.id,
   }))
-  let longPeriodOfWeights = longPeriod.map((date) => ({
+  let longPeriodOfWeights = arrayOfAllDatesToRender.map((date) => ({
     date: date.getTime(),
     weight: null,
     avgWeight: null,
@@ -81,29 +80,29 @@ const AllWeights = ({
   }, set)
   const sortedArray = uniqueArray.sort((a, b) => b.date - a.date)
   sortedArray.splice(
-    +distanceBetweenInDays,
-    sortedArray.length - distanceBetweenInDays
+    +numberOfDaysBetweenStartAndEnd,
+    sortedArray.length - numberOfDaysBetweenStartAndEnd
   )
 
   useEffect(() => {
-    longPeriod = [...Array(+distanceBetweenInDays)]
-      .map((_, idx) => addDays(priorDate, idx))
+    arrayOfAllDatesToRender = [...Array(+numberOfDaysBetweenStartAndEnd)]
+      .map((_, idx) => addDays(startDate, idx))
       .reverse()
-    longPeriodOfWeights = longPeriod.map((date) => ({
+    longPeriodOfWeights = arrayOfAllDatesToRender.map((date) => ({
       date: date.getTime(),
       weight: null,
     }))
-  }, [priorDate, dateState])
+  }, [startDate, dateState])
 
   useEffect(() => {
     if (typeof window === 'object') {
-      longPeriod.forEach((i, idx) => {
+      arrayOfAllDatesToRender.forEach((i, idx) => {
         const heightOfElement = document
           .getElementById(idx)
           ?.getBoundingClientRect().height
         const pos = document.getElementById(idx)?.getBoundingClientRect().top
         if (pos >= heightOfElement && pos <= 179) {
-          setValue(longPeriod[idx])
+          setValue(arrayOfAllDatesToRender[idx])
         }
       })
     }
@@ -136,14 +135,11 @@ const AllWeights = ({
               <AddWeight id={`${idx}`} key={idx} date={new Date(i.date)} />
             )
           )}
-        <div className="mb-[100px] flex h-[70px] w-full items-center justify-center">
-          <button
-            onClick={() => setNumberOfDaysBack(numberOfDaysBack + 90)}
-            className="flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
-          >
+        <div className="flex h-[70px] w-full items-center justify-center sm:mb-0">
+          <Button onClick={() => setNumberOfDaysBack(numberOfDaysBack + 90)}>
             <RefreshIcon className="mr-2 h-5" />
             Load More
-          </button>
+          </Button>
         </div>
       </div>
     </React.Fragment>

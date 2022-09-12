@@ -5,6 +5,7 @@ import { setDoc, doc, Timestamp } from 'firebase/firestore'
 import { useRouter } from 'next/router'
 import { LoginIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
+import Button from '../components/ui/Button'
 
 const Register = () => {
   const [data, setData] = useState({
@@ -148,13 +149,14 @@ const Register = () => {
 
           {error ? <p className="m-4">{error}</p> : null}
 
-          <button
-            onClick={() => handleSubmit()}
-            className="mt-10 flex w-full items-center justify-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
-          >
-            {loading ? 'Loading...' : 'Register'}{' '}
-            <LoginIcon className="ml-2 h-5" />
-          </button>
+          <div className="mt-10 flex justify-center">
+            <Button
+              iconRight={<LoginIcon className="ml-2 h-5" />}
+              onClick={() => handleSubmit()}
+            >
+              {loading ? 'Loading...' : 'Register'}{' '}
+            </Button>
+          </div>
 
           <Link href="/login">
             <a className="mt-4 block text-center text-sm font-medium text-red-400 hover:underline focus:outline-none focus:ring-2 focus:ring-red-300">

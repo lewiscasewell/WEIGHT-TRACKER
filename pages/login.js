@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../firebase'
 import { useRouter } from 'next/router'
 import { LoginIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
+import Button from '../components/ui/Button'
 
 const Login = () => {
   const [data, setData] = useState({
@@ -16,6 +17,10 @@ const Login = () => {
   const router = useRouter()
 
   const { email, password, error, loading } = data
+
+  useEffect(() => {
+    router.prefetch('/')
+  })
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value })
@@ -99,13 +104,14 @@ const Login = () => {
 
           {error ? <p className="m-4">{error}</p> : null}
 
-          <button
-            onClick={() => handleSubmit()}
-            className="mt-20 flex w-full items-center justify-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
-          >
-            {loading ? 'Loading...' : 'Login'}{' '}
-            <LoginIcon className="ml-2 h-5" />
-          </button>
+          <div className="mt-10 flex justify-center">
+            <Button
+              iconRight={<LoginIcon className="ml-2 h-5" />}
+              onClick={() => handleSubmit()}
+            >
+              {loading ? 'Loading...' : 'Login'}{' '}
+            </Button>
+          </div>
 
           <Link href="/register">
             <a className="mt-4 block text-center text-sm font-medium text-red-400 hover:underline focus:outline-none focus:ring-2 focus:ring-red-300">

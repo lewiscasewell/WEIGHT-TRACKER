@@ -2,9 +2,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline'
 
 import React, { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { dateState, numberOfDaysBackState } from '../atoms/dateAtom'
-import Header from './Header'
-
+import { dateState, numberOfDaysBackState } from '../../atoms/dateAtom'
+import Header from '../ui/Header'
 const {
   startOfWeek,
   addDays,
@@ -17,76 +16,61 @@ const {
 const Calendar = () => {
   const [noMoreNext, setNoMoreNext] = useState(false)
   const [value, setValue] = useRecoilState(dateState)
-
-  // Constants for building weekly calendar scroll view
-  const startDate = startOfWeek(value)
-  const weekBeforeStartDate = previousSaturday(value)
-  const weekNextStartDate = nextSunday(value)
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  const week = [...Array(7)].map((_, idx) => addDays(startDate, idx))
-
   const [numberOfDaysBack, setNumberOfDaysBack] = useRecoilState(
     numberOfDaysBackState
   )
 
-  const endOfLongDate = new Date()
-  let priorDate = startOfDay(
+  // Constants for building Sunday - Saturday calendar bar
+  const startOfWeekDate = startOfWeek(value)
+  const weekBeforeStartDate = previousSaturday(value)
+  const weekNextStartDate = nextSunday(value)
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const week = [...Array(7)].map((_, idx) => addDays(startOfWeekDate, idx))
+
+  // This is the beginning of the data that will be rendered on the weights page
+  const startDate = startOfDay(
     new Date(
       new Date().setDate(startOfDay(new Date()).getDate() - numberOfDaysBack)
     )
   )
+  // This is where the data will go up to - i.e. today's date
+  const endDate = new Date()
 
-  const distanceBetweenInDays = Math.ceil(
-    (endOfLongDate.getTime() - priorDate.getTime()) / (1000 * 3600 * 24)
+  // The number of days between the start date and the end date
+  const numberOfDaysBetweenStartAndEnd = Math.ceil(
+    (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)
   )
 
-  let longPeriod = [...Array(+distanceBetweenInDays)]
-    .map((_, idx) => addDays(priorDate, idx))
+  // array of all the dates to render, in the format of locale date string (in reverse so newest is first)
+  const arrayOfAllDatesToRender = [...Array(+numberOfDaysBetweenStartAndEnd)]
+    .map((_, idx) => addDays(startDate, idx).toLocaleDateString())
     .reverse()
 
-  let longPeriodGetDate = longPeriod.map((i) => i.toLocaleDateString())
-
-  useEffect(() => {
-    longPeriod = [...Array(+distanceBetweenInDays)]
-      .map((_, idx) => addDays(priorDate, idx))
-      .reverse()
-    longPeriodGetDate = longPeriod.map((i) => i.toLocaleDateString())
-  }, [priorDate])
-
-  function setToday() {
-    scrollToTopPositionOfDate(endOfLongDate)
-  }
-  function setWeekNext() {
-    scrollToTopPositionOfDate(weekNextStartDate)
-  }
-  function setWeekBefore() {
-    scrollToTopPositionOfDate(weekBeforeStartDate)
-  }
-
-  const scrollToTopPositionOfDate = (date) => {
+  // This function scrolls to the location of the rendered date
+  function scrollToTopPositionOfDate(date) {
     const selectedDate = date.toLocaleDateString().toString()
-    const indexOfSelectedDate = longPeriodGetDate.indexOf(selectedDate)
+    const indexOfSelectedDate = arrayOfAllDatesToRender.indexOf(selectedDate)
 
     const divToScrollIntoView = document.getElementById(indexOfSelectedDate)
-    divToScrollIntoView?.scrollIntoView({ behavior: 'auto' })
+
+    if (divToScrollIntoView) {
+      divToScrollIntoView.scrollIntoView({ behavior: 'auto' })
+    }
   }
 
   useEffect(() => {
+    // sets max date as today's date... you don't know your weight tomorrow
     const datePickerId = document.getElementById('datePickerId')
     datePickerId.max = new Date().toISOString().split('T')[0]
 
     if (startOfDay(new Date()).getTime() < weekNextStartDate.getTime()) {
       setNoMoreNext(true)
     }
-  }, [priorDate, weekNextStartDate])
-
-  useEffect(() => {
-    scrollToTopPositionOfDate(value)
-  }, [numberOfDaysBack])
+  }, [startDate, weekNextStartDate])
 
   return (
-    <React.Fragment>
-      <div className="sticky top-0 z-10 w-full bg-white/30 backdrop-blur-lg">
+    <>
+      <div className="sticky top-0 z-10 w-full bg-white">
         <Header />
         <div className="flex justify-between px-4 py-2">
           <input
@@ -96,7 +80,7 @@ const Calendar = () => {
             value={format(value, 'yyyy-MM-dd')}
             onChange={(e) => {
               const date = e.target.valueAsDate
-              if (date.getTime() <= priorDate.getTime()) {
+              if (date.getTime() <= startDate.getTime()) {
                 setNumberOfDaysBack(
                   Math.ceil(
                     (startOfDay(new Date().getTime()) - date.getTime()) /
@@ -104,7 +88,7 @@ const Calendar = () => {
                   ) + 90
                 )
               }
-              if (date.getTime() > priorDate.getTime()) {
+              if (date.getTime() > startDate.getTime()) {
                 scrollToTopPositionOfDate(date)
               }
 
@@ -116,18 +100,20 @@ const Calendar = () => {
               className="flex items-center justify-center px-2 py-1"
               onClick={() => {
                 setNoMoreNext(false)
-                setWeekBefore()
+                scrollToTopPositionOfDate(weekBeforeStartDate)
               }}
             >
               <ChevronLeftIcon className="h-4" />
             </button>
-            <button onClick={() => setToday()}>Today</button>
+            <button onClick={() => scrollToTopPositionOfDate(endDate)}>
+              Today
+            </button>
             <button
               className={`flex items-center justify-center px-2 py-1`}
               onClick={() => {
                 if (new Date().getTime() >= weekNextStartDate.getTime()) {
-                  setWeekNext()
                   setNoMoreNext(false)
+                  scrollToTopPositionOfDate(weekNextStartDate)
                 }
                 if (new Date().getTime() < weekNextStartDate.getTime()) {
                   setNoMoreNext(true)
@@ -173,7 +159,7 @@ const Calendar = () => {
           <div className="w-1/7"> </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   )
 }
 

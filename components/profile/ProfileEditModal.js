@@ -1,44 +1,50 @@
 import { ArrowLeftIcon, XIcon } from '@heroicons/react/outline'
 import { doc, updateDoc } from 'firebase/firestore'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { editProfileModalState } from '../atoms/modalAtom'
-import React from 'react'
-import {
-  activityState,
-  genderState,
-  goalState,
-  heightState,
-  targetWeightState,
-  unitState,
-  userState,
-} from '../atoms/userAtom'
-import { db } from '../firebase'
+import { useRecoilState } from 'recoil'
+import { editProfileModalState } from '../../atoms/modalAtom'
+import React, { useEffect, useState } from 'react'
+import { auth, db } from '../../firebase'
 import ProfileListbox from './ProfileListbox'
-import ActitiyLevelTooltip from './ActivityLevelToolTip'
+import ActitiyLevelTooltip from '../ui/ActivityLevelToolTip'
+import useUser from '../../hooks/useUser'
+import { useRouter } from 'next/router'
+import Button from '../ui/Button'
 
 const ProfileEditModal = () => {
+  const router = useRouter()
   const [modalOpen, setModalOpen] = useRecoilState(editProfileModalState)
-  const user = useRecoilValue(userState)
-  const gender = useRecoilValue(genderState)
-  const unit = useRecoilValue(unitState)
-  const [height, setHeight] = useRecoilState(heightState)
-  const activity = useRecoilValue(activityState)
-  const [targetWeight, setTargetWeight] = useRecoilState(targetWeightState)
-  const goal = useRecoilValue(goalState)
+  const {
+    user: { gender, height, activity, targetWeight },
+    loadingUser,
+  } = useUser()
+
+  const [profileEditState, setProfileEditState] = useState({
+    gender,
+    height,
+    activity,
+    targetWeight,
+  })
+
+  useEffect(() => {
+    setProfileEditState({
+      gender,
+      height,
+      activity,
+      targetWeight,
+    })
+  }, [loadingUser, modalOpen])
 
   const handleSave = async () => {
-    await updateDoc(doc(db, 'Users', user.uid), {
-      gender: gender || '',
-      unit: unit || '',
-      activity: activity || '',
-      goal: goal || '',
-      height: height || '',
-      targetWeight: targetWeight || '',
+    await updateDoc(doc(db, 'Users', auth.currentUser.uid), {
+      gender: profileEditState.gender || '',
+      activity: profileEditState.activity || '',
+      height: profileEditState.height || '',
+      targetWeight: profileEditState.targetWeight || '',
     })
+    router.reload()
   }
 
   const genderOptions = ['Male', 'Female']
-  // const unitOptions = ['kg']
   const activityOptions = [
     'Basal Metabolic rate',
     'Sedentary',
@@ -65,27 +71,26 @@ const ProfileEditModal = () => {
               <button
                 onClick={() => {
                   setModalOpen(false)
-                  window.location.reload(false)
                 }}
                 className="flex items-center justify-center rounded-full p-2 transition-colors ease-in hover:bg-slate-100 "
               >
                 <XIcon className="hidden h-5 sm:inline" />
                 <ArrowLeftIcon className="inline h-5 sm:hidden" />
               </button>
-              <button
-                className="mr-3 flex w-fit items-center rounded-md border-2 border-red-400 py-1 px-2 text-red-400 transition-colors ease-in hover:bg-red-400 hover:text-white"
-                onClick={() => {
-                  handleSave()
-                  setModalOpen(false)
-                }}
-              >
+              <Button className="mr-3" onClick={() => handleSave()}>
                 Save
-              </button>
+              </Button>
             </div>
             <div className="text-md flex flex-col space-y-5 p-2 sm:max-h-[450px] sm:overflow-scroll sm:text-lg">
               <div className="flex flex-col">
                 <label className="ml-2">Gender</label>
-                <ProfileListbox value={genderOptions} state={genderState} />
+                <ProfileListbox
+                  options={genderOptions}
+                  field={'gender'}
+                  value={profileEditState.gender}
+                  state={profileEditState}
+                  setState={setProfileEditState}
+                />
               </div>
 
               {/* <div className="flex flex-col">
@@ -98,8 +103,13 @@ const ProfileEditModal = () => {
                 <input
                   className="rounded-lg bg-white py-2 pl-3 pr-10 shadow-md focus:outline-none focus-visible:border-red-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-red-300"
                   type="number"
-                  value={height}
-                  onChange={(e) => setHeight(e.target.value)}
+                  value={profileEditState.height}
+                  onChange={(e) =>
+                    setProfileEditState({
+                      ...profileEditState,
+                      height: e.target.value,
+                    })
+                  }
                 />
               </div>
 
@@ -111,7 +121,13 @@ const ProfileEditModal = () => {
                   </span>
                 </label>
 
-                <ProfileListbox value={activityOptions} state={activityState} />
+                <ProfileListbox
+                  options={activityOptions}
+                  field={'activity'}
+                  value={profileEditState.activity}
+                  state={profileEditState}
+                  setState={setProfileEditState}
+                />
               </div>
 
               <div className="flex flex-col">
@@ -119,8 +135,13 @@ const ProfileEditModal = () => {
                 <input
                   className="rounded-lg bg-white py-2 pl-3 pr-10 shadow-md focus:outline-none focus-visible:border-red-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-red-300"
                   type="number"
-                  value={targetWeight}
-                  onChange={(e) => setTargetWeight(e.target.value)}
+                  value={profileEditState.targetWeight}
+                  onChange={(e) =>
+                    setProfileEditState({
+                      ...profileEditState,
+                      targetWeight: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>

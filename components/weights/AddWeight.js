@@ -2,8 +2,8 @@ import React from 'react'
 import { PlusCircleIcon } from '@heroicons/react/outline'
 import Moment from 'react-moment'
 import { useRecoilState } from 'recoil'
-import { modalState } from '../atoms/modalAtom'
-import { dateState } from '../atoms/dateAtom'
+import { modalState } from '../../atoms/modalAtom'
+import { dateState } from '../../atoms/dateAtom'
 
 const AddWeight = ({ date, id }) => {
   const [modalOpen, setModalOpen] = useRecoilState(modalState)

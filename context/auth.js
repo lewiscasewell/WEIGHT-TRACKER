@@ -1,6 +1,6 @@
 import { onAuthStateChanged } from 'firebase/auth'
 import { createContext, useEffect, useState } from 'react'
-import Loading from '../components/Loading'
+import Loading from '../components/ui/Loading'
 
 import { auth } from '../firebase'
 
@@ -16,6 +16,7 @@ const AuthProvider = ({ children }) => {
       setLoading(false)
     })
   }, [])
+
   if (loading) {
     return <Loading />
   }

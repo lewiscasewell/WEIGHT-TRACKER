@@ -1,54 +1,25 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   CollectionIcon,
   ChartPieIcon,
   UserIcon,
   PlusSmIcon,
 } from '@heroicons/react/outline'
-
 import NavBarLink from './NavBarLink'
+
 import { useRouter } from 'next/router'
-import { modalState } from '../atoms/modalAtom'
+import { modalState } from '../../atoms/modalAtom'
 import { useRecoilState } from 'recoil'
-import {
-  navWeightsState,
-  navAnalyticsState,
-  navProfileState,
-} from '../atoms/navBarAtom'
 
 const NavBar = () => {
-  const [navWeightsActive, setNavWeightsActive] =
-    useRecoilState(navWeightsState)
-  const [navAnalyticsActive, setNavAnalyticsActive] =
-    useRecoilState(navAnalyticsState)
-  const [navProfileActive, setNavProfileActive] =
-    useRecoilState(navProfileState)
   const NAV_ITEMS = [
-    { name: 'Weights', icon: CollectionIcon, active: navWeightsActive },
-    { name: 'Analytics', icon: ChartPieIcon, active: navAnalyticsActive },
-    { name: 'Profile', icon: UserIcon, active: navProfileActive },
+    { name: 'Weights', path: '/', icon: CollectionIcon },
+    { name: 'Analytics', path: '/analytics', icon: ChartPieIcon },
+    { name: 'Profile', path: '/profile', icon: UserIcon },
   ]
 
   const [modalOpen, setModalOpen] = useRecoilState(modalState)
   const router = useRouter()
-
-  useEffect(() => {
-    if (router.asPath === '/') {
-      setNavWeightsActive(true)
-      setNavAnalyticsActive(false)
-      setNavProfileActive(false)
-    }
-    if (router.asPath === '/analytics') {
-      setNavWeightsActive(false)
-      setNavAnalyticsActive(true)
-      setNavProfileActive(false)
-    }
-    if (router.asPath === '/profile') {
-      setNavWeightsActive(false)
-      setNavAnalyticsActive(false)
-      setNavProfileActive(true)
-    }
-  }, [router.asPath])
 
   return (
     <div>
@@ -59,7 +30,7 @@ const NavBar = () => {
               key={navItem.name}
               text={navItem.name}
               Icon={navItem.icon}
-              active={navItem.active}
+              active={navItem.path === router.asPath}
             />
           ))}
         </div>

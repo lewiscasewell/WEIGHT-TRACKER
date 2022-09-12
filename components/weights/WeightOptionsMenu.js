@@ -9,20 +9,20 @@ import {
   PencilIcon,
   TrashIcon,
 } from '@heroicons/react/outline'
-import { modalState } from '../atoms/modalAtom'
+import { modalState } from '../../atoms/modalAtom'
 import { useRecoilState } from 'recoil'
-import { dateState } from '../atoms/dateAtom'
+import { dateState } from '../../atoms/dateAtom'
 import { deleteDoc, doc } from 'firebase/firestore'
-import { db } from '../firebase'
-import { userState } from '../atoms/userAtom'
+import { auth, db } from '../../firebase'
 
 export default function WeightOptionsMenu({ date, weightId }) {
   const [modalOpen, setModalOpen] = useRecoilState(modalState)
   const [value, setValue] = useRecoilState(dateState)
-  const [user, setUser] = useRecoilState(userState)
 
   async function deleteWeight() {
-    await deleteDoc(doc(db, 'Weights', user.uid, 'Weight', weightId))
+    await deleteDoc(
+      doc(db, 'Weights', auth.currentUser.uid, 'Weight', weightId)
+    )
   }
 
   return (
@@ -42,7 +42,7 @@ export default function WeightOptionsMenu({ date, weightId }) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute right-0 z-20 mt-2 w-48 origin-top-right rounded-md bg-white p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <Menu.Item>
               {({ active }) => (
                 <button

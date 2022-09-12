@@ -11,7 +11,7 @@ import {
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { useRecoilValue } from 'recoil'
-import { weightsState } from '../atoms/userAtom'
+import { weightsState } from '../../atoms/userAtom'
 import { format } from 'date-fns'
 
 ChartJS.register(

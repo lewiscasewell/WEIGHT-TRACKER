@@ -1,70 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import AllWeights from '../components/AllWeights'
-import Calendar from '../components/Calendar'
-import MainContent from '../components/MainContent'
-import { useRecoilState } from 'recoil'
-import { auth, db } from '../firebase'
-import { userState, lastWeightState, weightsState } from '../atoms/userAtom'
-import {
-  collection,
-  doc,
-  getDoc,
-  onSnapshot,
-  orderBy,
-  query,
-} from 'firebase/firestore'
-import { useRouter } from 'next/router'
+import React, { useState } from 'react'
+import AllWeights from '../components/weights/AllWeights'
+import Calendar from '../components/weights/Calendar'
+import useWeights from '../hooks/useWeights'
+import Loading from '../components/ui/Loading'
+import { useRecoilValue } from 'recoil'
+import { numberOfDaysBackState } from '../atoms/dateAtom'
+import Layout from '../components/layout'
 
 export default function Home() {
+  const numberOfDaysBack = useRecoilValue(numberOfDaysBackState)
   const myRef = React.createRef()
   const [scrollTop, setScrollTop] = useState(0)
-
-  const [user, setUser] = useRecoilState(userState)
-  const [weights, setWeights] = useRecoilState(weightsState)
-  const [lastWeight, setLastWeight] = useRecoilState(lastWeightState)
-  const [loadingWeights, setLoadingWeights] = useState(false)
-  const router = useRouter()
+  const { weights, loadingWeights } = useWeights(numberOfDaysBack)
 
   const onScroll = () => {
     const scrollTop = myRef.current.scrollTop
     setScrollTop(scrollTop)
   }
 
-  useEffect(async () => {
-    setLoadingWeights(true)
-    if (!auth.currentUser) {
-      return router.push('/login')
-    }
-    await getDoc(doc(db, 'Users', auth.currentUser.uid)).then((docSnap) => {
-      if (docSnap.exists) {
-        setUser(docSnap.data())
-      }
-    })
-
-    const weightsRef = collection(db, 'Weights', auth.currentUser.uid, 'Weight')
-    const q = query(weightsRef, orderBy('date', 'desc'))
-
-    const unsub = onSnapshot(q, (querySnapshot) => {
-      let weights = []
-      querySnapshot.forEach((doc) => {
-        weights.push(Object.assign(doc.data(), { id: doc.id }))
-      })
-      setWeights(weights)
-      setLastWeight(weights[0])
-      setLoadingWeights(false)
-    })
-    return () => unsub()
-  }, [])
-
   return (
-    <div>
-      {/* <Head>
-        <title>WEIGHT-TRACKER</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head> */}
-
-      <MainContent>
-        <Calendar />
+    <Layout>
+      <Calendar />
+      {loadingWeights && <Loading />}
+      {!loadingWeights && (
         <AllWeights
           scrollTop={scrollTop}
           myRef={myRef}
@@ -72,7 +30,7 @@ export default function Home() {
           weights={weights}
           loadingWeights={loadingWeights}
         />
-      </MainContent>
-    </div>
+      )}
+    </Layout>
   )
 }

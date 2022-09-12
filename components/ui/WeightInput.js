@@ -7,15 +7,16 @@ import {
 import { format, startOfDay } from 'date-fns'
 import { addDoc, collection, doc, updateDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
-import { auth, db } from '../firebase'
+import { auth, db } from '../../firebase'
 import { useRecoilState } from 'recoil'
-import { dateState } from '../atoms/dateAtom'
-import { modalState } from '../atoms/modalAtom'
-import { lastWeightState, userState, weightsState } from '../atoms/userAtom'
+import { dateState } from '../../atoms/dateAtom'
+import { modalState } from '../../atoms/modalAtom'
 import { useRouter } from 'next/router'
+import useWeights from '../../hooks/useWeights'
+import useUser from '../../hooks/useUser'
 
-const Input = () => {
-  const [input, setInput] = useState(70)
+const WeightInput = () => {
+  const [weightInput, setWeightInput] = useState('70')
   const [isMin, setIsMin] = useState(false)
   const [isMax, setIsMax] = useState(false)
   const [weightIsEdited, setWeightIsEdited] = useState(false)
@@ -25,27 +26,24 @@ const Input = () => {
     useState()
 
   const [date, setDate] = useRecoilState(dateState)
+  console.log(date)
+
   const [modalOpen, setModalOpen] = useRecoilState(modalState)
-  const [lastWeight, setLastWeight] = useRecoilState(lastWeightState)
-  const [weights, setWeights] = useRecoilState(weightsState)
-  const [user, setUser] = useRecoilState(userState)
+  const { user, loadingUser } = useUser()
+
+  const { weights, lastWeight, loadingWeights } = useWeights()
 
   const router = useRouter()
 
-  // const transformWeightConversion = (weight) => {
-  //   if (user.unit === 'kg') return weight
-  //   if (user.unit === 'lb') return (weight * 2.20462).toFixed(1)
-  // }
-
   function validateOnBlur(e) {
-    setInput((+e.target.value).toFixed(1))
+    setWeightInput((+e.target.value).toFixed(1))
 
     if (+e.target.value <= 2.0) {
-      setInput(2.0)
+      setWeightInput(2.0)
       setIsMin(true)
     }
     if (+e.target.value >= 999) {
-      setInput(999)
+      setWeightInput(999)
       setIsMax(true)
     }
     if (+e.target.value >= 2.0 && +e.target.value <= 999) {
@@ -60,12 +58,14 @@ const Input = () => {
     // set the date picker's maximum date as today's date
     const dateTimePicker = document.getElementById('dateTimePicker')
     dateTimePicker.max = new Date().toISOString().split('T')[0]
-  }, [])
+
+    return () => weightInput.blur()
+  }, [lastWeight])
 
   const handleSubmit = async () => {
     setLoading(true)
-    await addDoc(collection(db, 'Weights', user.uid, 'Weight'), {
-      weight: user.unit === 'kg' ? input : (input / 2.20462).toFixed(1),
+    await addDoc(collection(db, 'Weights', auth.currentUser.uid, 'Weight'), {
+      weight: weightInput,
       date,
     })
     router.push('/')
@@ -81,7 +81,7 @@ const Input = () => {
       weightsDates.indexOf(startOfDay(date).getTime())
     )
 
-    setInput(
+    setWeightInput(
       weights[indexOfWeightForSelectedDate]
         ? weights[indexOfWeightForSelectedDate].weight
         : lastWeight
@@ -90,7 +90,7 @@ const Input = () => {
     )
 
     indexOfWeightForSelectedDate == -1 ? setIsEdit(false) : setIsEdit(true)
-  }, [date, indexOfWeightForSelectedDate, isEdit])
+  }, [date, weights, indexOfWeightForSelectedDate, isEdit])
 
   const handleChangeInputDate = (e) => {
     setDate(startOfDay(e.target.valueAsDate))
@@ -102,12 +102,12 @@ const Input = () => {
       doc(
         db,
         'Weights',
-        user.uid,
+        auth.currentUser.uid,
         'Weight',
         weights[indexOfWeightForSelectedDate].id
       ),
       {
-        weight: user.unit === 'kg' ? input : (input / 2.20462).toFixed(1),
+        weight: weightInput,
       }
     )
     router.push('/')
@@ -134,10 +134,10 @@ const Input = () => {
               setIsMax(false)
             }
             if (!isMin) {
-              setInput((Number(input) - 0.1).toFixed(1))
+              setWeightInput((Number(weightInput) - 0.1).toFixed(1))
               setWeightIsEdited(true)
             }
-            if (Number(input) <= 2.1) {
+            if (Number(weightInput) <= 2.1) {
               setIsMin(true)
             }
           }}
@@ -158,18 +158,18 @@ const Input = () => {
             onBlur={(e) => {
               validateOnBlur(e)
             }}
-            value={input}
+            value={weightInput}
             className={`w-[2.5em] appearance-none bg-transparent text-center text-7xl ${
               weightIsEdited ? 'text-slate-700' : 'text-slate-300'
             } outline-none sm:w-[3em] sm:text-8xl`}
             onChange={(e) => {
-              setInput(e.target.value)
+              setWeightInput(e.target.value)
               setWeightIsEdited(true)
             }}
             max={999}
             min={2}
           />
-          <span>{user.unit.toUpperCase()}</span>
+          <span>KG</span>
         </div>
         <button
           onClick={() => {
@@ -177,10 +177,10 @@ const Input = () => {
               setIsMin(false)
             }
             if (!isMax) {
-              setInput((Number(input) + 0.1).toFixed(1))
+              setWeightInput((Number(weightInput) + 0.1).toFixed(1))
               setWeightIsEdited(true)
             }
-            if (Number(input) >= 999) {
+            if (Number(weightInput) >= 999) {
               setIsMax(true)
             }
           }}
@@ -220,4 +220,4 @@ const Input = () => {
   )
 }
 
-export default Input
+export default WeightInput

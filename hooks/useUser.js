@@ -1,4 +1,5 @@
 import { doc, getDoc, Timestamp } from 'firebase/firestore'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { auth, db } from '../firebase'
 
@@ -17,6 +18,8 @@ export default function useUser() {
     uid: '',
     unit: '',
   })
+
+  const router = useRouter()
 
   useEffect(async () => {
     setLoadingUser(true)

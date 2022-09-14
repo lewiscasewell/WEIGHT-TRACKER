@@ -6,6 +6,7 @@ import {
   query,
   Timestamp,
 } from 'firebase/firestore'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 import { auth, db } from '../firebase'
@@ -16,8 +17,14 @@ export default function useWeights(weightCountLimit = 90) {
     { weight: '70', date: Timestamp.fromDate(new Date()), id: '' },
   ])
   const [lastWeight, setLastWeight] = useState(70)
+  const router = useRouter()
+
   useEffect(async () => {
     setLoadingWeights(true)
+
+    if (!auth.currentUser) {
+      return router.push('/login')
+    }
 
     const weightsRef = collection(db, 'Weights', auth.currentUser.uid, 'Weight')
     const q = query(

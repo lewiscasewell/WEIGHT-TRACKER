@@ -238,9 +238,11 @@ export default function Analytics() {
           </div>
         </div>
       ) : (
-        <div className="p-2">
-          Finish all profile fields and log at least one weight to see
-          analytics.
+        <div className="flex h-screen items-center justify-center">
+          <div className="p-2 text-center">
+            Finish all profile fields and log at least one weight to see
+            analytics.
+          </div>
         </div>
       )}
     </Layout>
